@@ -242,9 +242,15 @@
             </span>
             <span id="nosqlEngineBadge" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sand text-stonewarm">Hazırlanıyor</span>
           </div>
-          <div class="mt-1.5 flex items-baseline justify-between">
-            <span class="text-[11.5px] text-stonewarm">Mükerrer korumalı kayıt</span>
-            <span id="nosqlTotalCount" class="font-mono text-[14px] font-semibold text-espresso">0</span>
+          <div class="mt-2 grid grid-cols-2 gap-2 pt-2 border-t border-hairline/70">
+            <div>
+              <div class="text-[10px] font-mono uppercase text-stonewarm">Ekranda Aktif</div>
+              <div id="nosqlActiveCount" class="font-mono text-[14px] font-semibold text-espresso">0</div>
+            </div>
+            <div>
+              <div class="text-[10px] font-mono uppercase text-stonewarm">Arşivlenen</div>
+              <div id="nosqlTotalCount" class="font-mono text-[14px] font-semibold text-terracotta">0</div>
+            </div>
           </div>
         </div>
 
@@ -394,9 +400,9 @@
       <!-- Üst Başlık -->
       <div class="px-6 py-5 border-b border-hairline flex items-start justify-between gap-4">
         <div>
-          <span class="text-[11px] font-mono uppercase tracking-[0.12em] text-sage font-semibold">NoSQL Mükerrer Engelleme Belleği</span>
-          <h3 class="font-serif text-xl font-medium text-espresso mt-1">Görülen İçerikler Arşivi</h3>
-          <p class="text-[12.5px] text-stonewarm mt-0.5">Bu listedeki içerikler tekrar karşınıza çıkarılmaz. Tüm detayları görmek için herhangi bir kayda tıklayın.</p>
+          <span class="text-[11px] font-mono uppercase tracking-[0.12em] text-sage font-semibold">NoSQL Arşiv & Geri Yükleme Belleği</span>
+          <h3 class="font-serif text-xl font-medium text-espresso mt-1">Arşivlenen İçerikler</h3>
+          <p class="text-[12.5px] text-stonewarm mt-0.5">Veriler yalnızca "Veriyi Yenile" butonuna bastığınızda buraya taşınır. Detayları görmek için kayda tıklayın veya "Kategoriye Geri Gönder" ile tekrar ekrana alın.</p>
         </div>
         <button id="closeArchiveModalBtn" type="button" aria-label="Arşivi Kapat" class="p-2 rounded-xl text-stonewarm hover:bg-sand">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -1120,28 +1126,56 @@
           title: "Bağımsız Sinema Salonları 2026 Sonbaharında 35mm ve 70mm Gösterimlerle Rekor Seyirciye Ulaştı",
           topic: "Sektör",
           date: "Kasım 2026",
-          summary: "Kuzey Amerika ve Avrupa'daki repertuvar sinemaları, genç izleyici kuşağının analog film gösterimlerine artan ilgisiyle 2019 sonrası en yüksek doluluk oranını yakaladı.",
+          author: "IndieWire Sektör Masası",
+          summary: "Kuzey Amerika ve Avrupa'daki repertuvar sinemaları, Z kuşağı izleyicilerin analog film gösterimlerine artan ilgisiyle 2019 sonrası en yüksek doluluk oranını yakaladı. Özellikle sınırlı sayıda basılan 70mm ve 35mm kopyalar, büyük zincir salonların hafta sonu ortalamalarını geride bıraktı.",
+          keyPoints: [
+            "Bağımsız repertuvar salonlarında 25 yaş altı seyirci payı son iki yılda %34 arttı.",
+            "Yönetmen söyleşili özel analog gösterimlerin %82'si satışa çıktığı ilk gün tükendi.",
+            "Dağıtımcılar 2027 ödül sezonu filmleri için 35mm kopya bütçelerini iki katına çıkarıyor."
+          ],
+          editorialNote: "Dijital platform yorgunluğu, sinema salonunu yeniden kolektif bir ritüel mekânına dönüştürüyor.",
           sourceUrl: "https://www.indiewire.com/c/news/"
         },
         {
           title: "2027 Ödül Sezonu İlk Eleştirmen Listeleri: Uluslararası Yönetmenler Yarışa Damga Vuruyor",
           topic: "Ödül Sezonu",
           date: "Kasım 2026",
-          summary: "Gotham ve New York Film Eleştirmenleri Birliği oylamaları öncesinde İngilizce dışındaki dillerde çekilen beş yapım En İyi Film kategorisinin favorileri arasına girdi.",
+          author: "IndieWire Ödül Analizi",
+          summary: "Gotham ve New York Film Eleştirmenleri Birliği oylamaları öncesinde İngilizce dışındaki dillerde çekilen beş yapım En İyi Film kategorisinin güçlü favorileri arasına girdi. Eleştirmenler, özellikle Cannes ve Venedik çıkışlı Avrupa-Asya ortak yapımlarının Akademi üyeleri arasında hızla karşılık bulduğunu vurguluyor.",
+          keyPoints: [
+            "Uluslararası yapımlar yalnızca yabancı dilde film değil, yönetmen ve senaryo dallarında da öne çıkıyor.",
+            "Bağımsız dağıtımcılar erken eleştirmen gösterimlerini Kasım ayına çekerek ivme kazanıyor.",
+            "Yeni kuşak kadın yönetmenlerin imzasını taşıyan yapımlar eleştirmen anketlerinde ilk beşte."
+          ],
+          editorialNote: "Instagram'da ödül sezonu tahmin serisi başlatmak için en verimli gündem başlığı.",
           sourceUrl: "https://www.indiewire.com/c/awards/"
         },
         {
           title: "A24, MUBI ve NEON'un 2027 Festival Satın Alma Stratejileri Nasıl Değişiyor?",
           topic: "Festival",
           date: "Kasım 2026",
-          summary: "Bağımsız dağıtımcılar artık yalnızca ABD hakları yerine çok bölgeli sinema + dijital seçki paketleriyle yapım aşamasından itibaren projelere ortak oluyor.",
+          author: "IndieWire Dağıtım Raporu",
+          summary: "Bağımsız dağıtımcılar artık yalnızca ABD haklarını festival sonrası satın almak yerine çok bölgeli sinema ve dijital seçki paketleriyle henüz geliştirme veya çekim aşamasında projelere ortak oluyor. Bu yaklaşım, auteur yönetmenlere daha güvenli finansman sağlarken festival rekabetini de yukarı taşıyor.",
+          keyPoints: [
+            "MUBI, Avrupa ve Latin Amerika haklarını tek pakette birleştirerek eş zamanlı vizyon modelini büyütüyor.",
+            "A24 ve NEON, düşük bütçeli tür sineması ve korku-gerilim ortak yapımlarına ağırlık veriyor.",
+            "Festival prömiyeri öncesi yapılan ön satışların toplam hacmi geçen yıla göre %27 yükseldi."
+          ],
+          editorialNote: "Bağımsız film finansmanı ve dağıtım dinamiklerini anlatan kaydırmalı gönderi için güçlü veri.",
           sourceUrl: "https://www.indiewire.com/c/news/"
         },
         {
           title: "Yeni Kuşak Görüntü Yönetmenlerinden 16mm ve Hibrit Lens Tercihleri Üzerine Derin Analiz",
           topic: "Eleştiri",
           date: "Kasım 2026",
-          summary: "Son iki yılın en çok konuşulan festival filmlerinde dijital sensörlerin eski anamorfik lenslerle eşleştirilmesi, bağımsız sinemanın yeni görsel dilini belirliyor.",
+          author: "IndieWire Sinematografi Dosyası",
+          summary: "Son iki yılın en çok konuşulan festival filmlerinde dijital büyük format sensörlerin 1970'ler yapımı eski anamorfik lenslerle eşleştirilmesi, bağımsız sinemanın yeni görsel dilini belirliyor. 16mm pelikülün dokusal sıcaklığı ise özellikle büyüme hikâyeleri ve dönem dramalarında yeniden ilk tercih hâline geldi.",
+          keyPoints: [
+            "Doğal ışık kullanımı ve elde kamera estetiği düşük bütçeli setlerde hız ve samimiyet sağlıyor.",
+            "Özel üretim optik kaplamalarla dijital görüntünün aşırı keskinliği bilinçli olarak yumuşatılıyor.",
+            "Renk düzenleme (DI) süreçlerinde analog film tarama profilleri standart hâline geldi."
+          ],
+          editorialNote: "Sinematografi ve kamera arkası meraklıları için kaydetme oranı yüksek teknik içerik.",
           sourceUrl: "https://www.indiewire.com/c/craft/"
         }
       ],
@@ -1279,28 +1313,56 @@
           title: "Sonbahar Festivallerinden Çıkan Avrupa Bağımsızları Türkiye'de Özel Gösterimlerle Buluşuyor",
           tag: "Haber",
           date: "Kasım 2026",
-          summary: "Cannes, Venedik ve Locarno seçkilerinden ödülle dönen yeni kuşak Avrupa filmleri, İstanbul ve Ankara'daki bağımsız sinema salonlarında art arda programlanıyor.",
+          author: "Fil'm Hafızası Editöryal",
+          summary: "Cannes, Venedik ve Locarno seçkilerinden ödülle dönen yeni kuşak Avrupa filmleri, İstanbul, Ankara ve İzmir'deki bağımsız sinema salonlarında yönetmen ve eleştirmen söyleşileri eşliğinde programlanıyor. Seçki, ticari vizyon şansı bulamayan özgün yapımları beyazperdede izleme olanağı sunuyor.",
+          keyPoints: [
+            "Gösterimler kapsamında 12 farklı ülkeden 16 ödüllü bağımsız yapım tek gösterimlik özel kopyalarla sunuluyor.",
+            "Bilet gelirlerinin bir bölümü genç sinemacıların kısa film üretim fonuna aktarılıyor.",
+            "Programda hem ilk filmler hem de usta yönetmenlerin son dönem eserleri dengeli biçimde yer alıyor."
+          ],
+          editorialNote: "Hafta sonu sinema rehberi veya şehirde ne izlenir serisi için ideal başlangıç.",
           sourceUrl: "https://filmhafizasi.com/"
         },
         {
           title: "Sessizliğin Sineması: Çağdaş Uzak Doğu Auteur'lerinde Mekân ve Zaman Kullanımı",
           tag: "Dosya",
           date: "Kasım 2026",
-          summary: "Ryusuke Hamaguchi'den Bi Gan'a uzanan çizgide sabit kamera, uzun plan ve gündelik ses tasarımının izleyiciyle kurduğu meditasyon benzeri ilişki.",
+          author: "Fil'm Hafızası İnceleme",
+          summary: "Ryusuke Hamaguchi'den Bi Gan'a, Hirokazu Kore-eda'dan Hong Sang-soo'ya uzanan çizgide sabit kamera, uzun planlar ve gündelik ortam seslerinin izleyiciyle kurduğu meditasyon benzeri ilişki inceleniyor. Dosya, modern sinemada hız baskısına karşı yavaşlığın politik ve estetik gücünü tartışıyor.",
+          keyPoints: [
+            "Diyalogsuz uzun sekanslar izleyicinin mekân hafızasını aktif bir anlatı unsuruna dönüştürüyor.",
+            "Rüzgâr, tren ve yağmur gibi doğal ses katmanları geleneksel film müziğinin yerini alıyor.",
+            "Kameranın karakterle kurduğu mesafeli çerçeve, duygusal manipülasyondan kaçınan bir dürüstlük yaratıyor."
+          ],
+          editorialNote: "Sinefil takipçilerin en çok kaydettiği derinlikli analiz ve alıntı formatına uygun.",
           sourceUrl: "https://filmhafizasi.com/"
         },
         {
           title: "Keşif Kuşağı: Dijital Platformların Gölgesinde Kalan 5 Ödüllü Kısa Film",
           tag: "Keşif",
           date: "Kasım 2026",
-          summary: "Clermont-Ferrand ve Oberhausen seçkilerinden dikkat çeken, 15 dakikanın altında güçlü anlatı kuran beş bağımsız kısa film önerisi.",
+          author: "Fil'm Hafızası Kürasyon",
+          summary: "Clermont-Ferrand, Tampere ve Oberhausen seçkilerinden dikkat çeken, 15 dakikanın altında güçlü atmosfer ve keskin kurgu kuran beş bağımsız kısa film önerisi. Seçkide belgesel-kurmaca sınırında dolaşan Avrupa ve Orta Doğu yapımları öne çıkıyor.",
+          keyPoints: [
+            "Seçkideki beş yapımın tamamı uluslararası festivallerde jüri veya seyirci ödülü kazandı.",
+            "Üç yapım yasal kısa film platformlarında ücretsiz ve Türkçe altyazılı olarak erişime açık.",
+            "Kısa süre içinde tek mekânda yüksek gerilim kurma teknikleri açısından örnek niteliğinde."
+          ],
+          editorialNote: "Kısa film öneri postları Instagram'da yüksek paylaşım ve kaydetme getirir.",
           sourceUrl: "https://filmhafizasi.com/"
         },
         {
           title: "Restore Edilen Yerli Klasikler 2026–2027 Sezonunda Yeniden Beyazperdede",
           tag: "Haber",
           date: "Kasım 2026",
-          summary: "1970'ler ve 1980'ler Türk sinemasının önemli kopyalarının 4K dijital restorasyon süreci tamamlandı; ilk gösterimler sinemateklerde izleyiciyle buluşacak.",
+          author: "Fil'm Hafızası Gündem",
+          summary: "1970'ler ve 1980'ler Türk sinemasının önemli kopyalarının 4K dijital restorasyon ve ses temizleme süreci tamamlandı. Restore edilen klasikler, yeni sezonda sinemateklerde ve üniversite kulüplerinde akademisyenlerin sunumlarıyla izleyiciyle buluşacak.",
+          keyPoints: [
+            "Orijinal 35mm negatiflerden yapılan taramalarda renk dengesi ve gren yapısı titizlikle korundu.",
+            "Gösterimler sonrası arşiv fotoğraf sergileri ve restorasyon ekibiyle soru-cevap oturumları düzenleniyor.",
+            "Proje kapsamında 2027 yılında sekiz yeni yerli klasiğin daha restorasyon programına alınması planlanıyor."
+          ],
+          editorialNote: "Türk sineması mirasına dair nostalji ve güncel kültür haberini birleştiren güçlü konu.",
           sourceUrl: "https://filmhafizasi.com/"
         }
       ]
@@ -1779,7 +1841,8 @@
 
     /* ============================================================================
        6. ÇİFT KATMANLI NoSQL DEPO MOTORU (FIRESTORE + INDEXEDDB)
-       Gösterilen her veriyi kalıcı saklar; sonraki oturumlarda tekrar göstermez.
+       Veriler yalnızca "Veriyi Yenile" butonuna basıldığında arşive taşınır;
+       sayfa yenilemede veya kapatıp açmada aktif veriler korunur.
        ============================================================================ */
     class DualNoSQLStore {
       constructor() {
@@ -1789,7 +1852,7 @@
         this.firestoreDb = null;
         this.user = null;
         this.appId = typeof __app_id !== "undefined" ? __app_id : "sinekurator-app";
-        this.records = new Map(); // key -> { key, categoryId, title, provenance, seenAt, deliveredSessionId, payloadJson }
+        this.records = new Map(); // key -> { key, categoryId, title, provenance, seenAt, status: 'active'|'archived', archivedAt, restoredAt, deliveredSessionId, payloadJson }
         this.engineLabel = "IndexedDB";
       }
 
@@ -1838,7 +1901,46 @@
           this.engineLabel = "IndexedDB NoSQL";
         }
 
+        // Eski sürümden kalan 'status' alanı olmayan kayıtları sorunsuz migrate et
+        await this.migrateLegacyStatuses();
         this.updateStatusUI();
+      }
+
+      async migrateLegacyStatuses() {
+        const byCat = new Map();
+        for (const rec of this.records.values()) {
+          if (!rec.status) {
+            if (!byCat.has(rec.categoryId)) byCat.set(rec.categoryId, []);
+            byCat.get(rec.categoryId).push(rec);
+          }
+        }
+        if (byCat.size === 0) return;
+
+        for (const [catId, list] of byCat.entries()) {
+          // Kategoride zaten modern 'active' kayıt varsa eskileri 'archived' yap; yoksa en son oturumu 'active' tut
+          const alreadyHasActive = this.getActiveRecordsByCategory(catId).length > 0;
+          list.sort((a, b) => (b.seenAt || 0) - (a.seenAt || 0));
+          const latestSessId = list[0]?.deliveredSessionId;
+
+          for (const rec of list) {
+            rec.status = (!alreadyHasActive && rec.deliveredSessionId === latestSessId) ? "active" : "archived";
+            if (rec.status === "archived" && !rec.archivedAt) rec.archivedAt = rec.seenAt || Date.now();
+            this.records.set(rec.key, rec);
+            await this.persistRecord(rec);
+          }
+        }
+      }
+
+      async persistRecord(record) {
+        await this.putToIndexedDB(record);
+        if (this.firestoreDb && this.user) {
+          try {
+            const docRef = doc(this.firestoreDb, "artifacts", this.appId, "users", this.user.uid, "seen_items", record.key);
+            await setDoc(docRef, record);
+          } catch {
+            // Yerel IndexedDB kaydı güvende
+          }
+        }
       }
 
       openIndexedDB() {
@@ -1926,6 +2028,14 @@
         return this.records.size;
       }
 
+      getTotalCountForCategory(categoryId) {
+        let count = 0;
+        for (const rec of this.records.values()) {
+          if (categoryId === "all" || rec.categoryId === categoryId) count++;
+        }
+        return count;
+      }
+
       getRecordsByCategory(categoryId) {
         const list = [];
         for (const rec of this.records.values()) {
@@ -1936,11 +2046,89 @@
         return list.sort((a, b) => (b.seenAt || 0) - (a.seenAt || 0));
       }
 
+      getActiveRecordsByCategory(categoryId) {
+        const list = [];
+        for (const rec of this.records.values()) {
+          if ((categoryId === "all" || rec.categoryId === categoryId) && rec.status === "active") {
+            list.push(rec);
+          }
+        }
+        return list.sort((a, b) => (b.restoredAt || b.seenAt || 0) - (a.restoredAt || a.seenAt || 0));
+      }
+
+      getArchivedRecordsByCategory(categoryId) {
+        const list = [];
+        for (const rec of this.records.values()) {
+          if ((categoryId === "all" || rec.categoryId === categoryId) && rec.status === "archived") {
+            list.push(rec);
+          }
+        }
+        return list.sort((a, b) => (b.archivedAt || b.seenAt || 0) - (a.archivedAt || a.seenAt || 0));
+      }
+
+      getActiveItemsForCategory(categoryId) {
+        return this.getActiveRecordsByCategory(categoryId).map(rec => {
+          try {
+            return JSON.parse(rec.payloadJson);
+          } catch {
+            return { title: rec.title, _key: rec.key, _provenance: rec.provenance };
+          }
+        });
+      }
+
+      getActiveCount(categoryId = "all") {
+        return this.getActiveRecordsByCategory(categoryId).length;
+      }
+
+      getArchivedCount(categoryId = "all") {
+        return this.getArchivedRecordsByCategory(categoryId).length;
+      }
+
       getSeenTitlesForCategory(categoryId) {
         return this.getRecordsByCategory(categoryId).map(r => r.title);
       }
 
-      async saveItems(categoryId, items, provenance = "Canlı Tarama") {
+      /**
+       * Yalnızca "Veriyi Yenile" butonuna basıldığında çağrılır:
+       * Mevcut ekrandaki aktif kayıtları NoSQL içinde 'archived' durumuna taşır.
+       */
+      async archiveActiveItems(categoryId) {
+        const actives = this.getActiveRecordsByCategory(categoryId);
+        let archivedCount = 0;
+        const now = Date.now();
+        for (const rec of actives) {
+          rec.status = "archived";
+          rec.archivedAt = now;
+          this.records.set(rec.key, rec);
+          await this.persistRecord(rec);
+          archivedCount++;
+        }
+        this.updateStatusUI();
+        return archivedCount;
+      }
+
+      /**
+       * Arşivdeki tek bir kaydı ait olduğu kategoriye ('active') geri gönderir.
+       */
+      async restoreItemToCategory(key) {
+        const rec = this.records.get(key);
+        if (!rec) return null;
+        rec.status = "active";
+        rec.restoredAt = Date.now();
+        this.records.set(key, rec);
+        await this.persistRecord(rec);
+        this.updateStatusUI();
+
+        let item = null;
+        try {
+          item = JSON.parse(rec.payloadJson);
+        } catch {
+          item = { title: rec.title, _key: rec.key, _provenance: rec.provenance };
+        }
+        return { record: rec, item };
+      }
+
+      async saveItems(categoryId, items, provenance = "Canlı Tarama", status = "active") {
         const newlySaved = [];
         let duplicatesFiltered = 0;
 
@@ -1952,11 +2140,12 @@
             continue;
           }
 
+          const now = Date.now();
           const enrichedItem = {
             ...rawItem,
             _key: key,
             _provenance: rawItem.fetchMethod || provenance,
-            _seenAt: Date.now()
+            _seenAt: now
           };
 
           const record = {
@@ -1964,26 +2153,17 @@
             categoryId,
             title: rawItem.title,
             provenance: enrichedItem._provenance,
-            seenAt: enrichedItem._seenAt,
+            seenAt: now,
+            status,
+            archivedAt: status === "archived" ? now : null,
+            restoredAt: null,
             deliveredSessionId: CURRENT_SESSION_ID,
             payloadJson: JSON.stringify(enrichedItem)
           };
 
           this.records.set(key, record);
           newlySaved.push(enrichedItem);
-
-          // IndexedDB'ye yaz
-          await this.putToIndexedDB(record);
-
-          // Bulut Firestore'a yaz (Kural 1 & 3 korumalı)
-          if (this.firestoreDb && this.user) {
-            try {
-              const docRef = doc(this.firestoreDb, "artifacts", this.appId, "users", this.user.uid, "seen_items", key);
-              await setDoc(docRef, record);
-            } catch {
-              // Yerel IndexedDB kaydı güvende
-            }
-          }
+          await this.persistRecord(record);
         }
 
         this.updateStatusUI();
@@ -2017,9 +2197,11 @@
 
       updateStatusUI() {
         const badge = document.getElementById("nosqlEngineBadge");
-        const countEl = document.getElementById("nosqlTotalCount");
+        const archivedCountEl = document.getElementById("nosqlTotalCount");
+        const activeCountEl = document.getElementById("nosqlActiveCount");
         if (badge) badge.textContent = this.engineLabel;
-        if (countEl) countEl.textContent = String(this.records.size);
+        if (activeCountEl) activeCountEl.textContent = String(this.getActiveCount("all"));
+        if (archivedCountEl) archivedCountEl.textContent = String(this.getArchivedCount("all"));
       }
     }
 
@@ -2112,7 +2294,7 @@
     }
 
     /**
-     * Çoklu CORS proxy destekli RSS okuma (rss2json -> allorigins -> corsproxy)
+     * Çoklu CORS proxy destekli RSS okuma (tam metin, yazar ve etiketlerle birlikte)
      */
     async function fetchRssItemsFromUrl(rssUrl) {
       // Proxy 1: rss2json (hazır JSON)
@@ -2121,12 +2303,19 @@
         if (res.ok) {
           const data = await res.json();
           if (data && data.status === "ok" && Array.isArray(data.items) && data.items.length > 0) {
-            return data.items.map(it => ({
-              title: stripHtmlTags(it.title),
-              summary: stripHtmlTags(it.description || it.content || "").slice(0, 280),
-              link: it.link || rssUrl,
-              pubDate: it.pubDate || ""
-            }));
+            return data.items.map(it => {
+              const fullBody = stripHtmlTags(it.content || it.description || "");
+              const shortDesc = stripHtmlTags(it.description || "");
+              const richText = fullBody.length > shortDesc.length ? fullBody : shortDesc;
+              return {
+                title: stripHtmlTags(it.title),
+                summary: richText.slice(0, 850),
+                link: it.link || rssUrl,
+                pubDate: it.pubDate || "",
+                author: stripHtmlTags(it.author || ""),
+                categories: Array.isArray(it.categories) ? it.categories.map(stripHtmlTags).filter(Boolean).slice(0, 5) : []
+              };
+            });
           }
         }
       } catch {
@@ -2155,15 +2344,25 @@
         const nodes = [...doc.querySelectorAll("item, entry")];
         return nodes.slice(0, 12).map(node => {
           const title = stripHtmlTags(node.querySelector("title")?.textContent || "");
-          const desc = stripHtmlTags(
+          const encodedContent = node.getElementsByTagName("content:encoded")?.[0]?.textContent || "";
+          const descRaw = encodedContent ||
+            node.querySelector("content")?.textContent ||
             node.querySelector("description")?.textContent ||
-            node.querySelector("summary")?.textContent ||
-            node.querySelector("content")?.textContent || ""
-          ).slice(0, 280);
+            node.querySelector("summary")?.textContent || "";
+          const summary = stripHtmlTags(descRaw).slice(0, 850);
           const linkNode = node.querySelector("link");
           const link = (linkNode?.getAttribute("href") || linkNode?.textContent || fallbackLink).trim();
           const pubDate = (node.querySelector("pubDate")?.textContent || node.querySelector("updated")?.textContent || "").trim();
-          return { title, summary: desc, link, pubDate };
+          const author = stripHtmlTags(
+            node.querySelector("author name")?.textContent ||
+            node.querySelector("author")?.textContent ||
+            node.getElementsByTagName("dc:creator")?.[0]?.textContent || ""
+          );
+          const categories = [...node.querySelectorAll("category")]
+            .map(c => stripHtmlTags(c.textContent || c.getAttribute("term") || ""))
+            .filter(Boolean)
+            .slice(0, 5);
+          return { title, summary, link, pubDate, author, categories };
         }).filter(x => x.title.length > 4);
       } catch {
         return [];
@@ -2176,12 +2375,108 @@
     }
 
     function extractDeadlineFromText(text) {
-      const m = String(text || "").match(/(?:deadline|due|closes|until|by|son başvuru)[^.:\n]{0,45}/i);
+      const m = String(text || "").match(/(?:deadline|due|closes|until|by|son başvuru)[^.:\n]{0,55}/i);
       return m ? m[0].trim() : "Güncel dönem — resmi portaldan doğrulayın";
     }
 
+    function extractYearFromText(text, fallback = "2026") {
+      const m = String(text || "").match(/\b(19[5-9]\d|20[0-2]\d)\b/);
+      return m ? m[1] : fallback;
+    }
+
+    function extractSentencesAsPoints(text, maxPoints = 3) {
+      if (!text) return [];
+      const parts = String(text)
+        .split(/(?<=[.!?])\s+/)
+        .map(s => s.trim())
+        .filter(s => s.length >= 28 && s.length <= 240);
+      return parts.slice(0, maxPoints);
+    }
+
+    function detectContinentFromText(text) {
+      const t = String(text || "").toLowerCase();
+      if (/sundance|tiff|toronto|tribeca|sxsw|telluride|nyff|american|usa|canada/.test(t)) return "Kuzey Amerika";
+      if (/mar del plata|buenos aires|gramado|guadalajara|brazil|argentina|chile|latin/.test(t)) return "Güney Amerika";
+      if (/busan|tokyo|hong kong|taipei|mumbai|asia|korea|japan|china|india/.test(t)) return "Asya";
+      if (/fespaco|durban|cairo|marrakech|carthage|africa|morocco|egypt/.test(t)) return "Afrika";
+      if (/sydney|melbourne|auckland|australia|zealand|pacific/.test(t)) return "Okyanusya";
+      return "Avrupa";
+    }
+
     /**
-     * Katman 1A: Kategorinin tüm RSS akışlarını paralel tarayıp şemaya dönüştürür
+     * Ham RSS veya HTML verilerini Gemini ile Türkçe, bol detaylı editöryal kartlara dönüştürür.
+     * Gemini erişilemezse geliştirilmiş yerel ayrıştırıcı devreye girer.
+     */
+    async function enrichScrapedItemsWithGemini(categoryId, rawEntries, sourceTag) {
+      if (!rawEntries || rawEntries.length === 0) return [];
+      const cat = CATEGORIES.find(c => c.id === categoryId);
+      const schemaHint = getGeminiSchemaHint(categoryId);
+
+      appendScanLog(`AI Zenginleştirme: ${rawEntries.length} canlı kaynak kaydı detaylı Türkçe editöryal kartlara işleniyor...`, "info");
+
+      const compactInput = rawEntries.map((r, i) => ({
+        idx: i + 1,
+        rawTitle: r.title,
+        rawText: (r.summary || r.bodyText || "").slice(0, 750),
+        link: r.link || r.url || "",
+        date: r.pubDate || "Kasım 2026",
+        author: r.author || "",
+        tags: r.categories || []
+      }));
+
+      const prompt = `Sen deneyimli bir Türkçe sinema editörüsün.
+Aşağıda canlı web/RSS kaynaklarından yeni çekilmiş ${rawEntries.length} ham kayıt var.
+Kategori: "${cat ? cat.title : categoryId}"
+GÖREV: Bu ham kayıtların HER BİRİNİ yalnızca başlık olarak BIRAKMA; Türkçe'ye çevirerek ve sinema bilginle bağlam ekleyerek zengin, ayrıntılı, yayına hazır editöryal kartlara dönüştür.
+KURALLAR:
+1. "title" alanını anlaşılır, editoryal Türkçe başlık yap (film adlarını koru).
+2. "summary" alanı EN AZ 3-4 dolu cümle (220-420 karakter) içersin; ne olduğunu, neden önemli olduğunu ve sinema bağlamını anlatsın.
+3. "keyPoints" dizisinde mutlaka 2 veya 3 adet somut, bilgilendirici detay maddesi ver.
+4. "editorialNote" alanında içerik üreticisi için 1 cümlelik kısa kürasyon notu ekle.
+5. Kategoriye özel TÜM alanları (yönetmen, yapım yılı, ödüller, festivaller, yarışma filmleri, gişe rakamları, fon tutarı, son başvuru tarihi, başvuru koşulları vb.) eksiksiz ve gerçekçi doldur.
+6. "sourceUrl" olarak mutlaka ilgili kaydın orijinal linkini koru.
+7. Yalnızca geçerli JSON dizisi ([{...}]) döndür.
+
+Beklenen JSON şeması: ${schemaHint}
+Ham kayıtlar:
+${JSON.stringify(compactInput)}`;
+
+      const apiKey = "";
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+      try {
+        const res = await fetchWithTimeout(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { responseMimeType: "application/json" }
+          })
+        }, 12000);
+
+        if (res.ok) {
+          const data = await res.json();
+          const rawText = data?.candidates?.[0]?.content?.parts?.map(p => p.text || "").join("") || "";
+          const parsed = extractJsonArrayFromText(rawText);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            appendScanLog(`AI Zenginleştirme tamamlandı: ${parsed.length} kayıt tam detaylı Türkçe karta dönüştürüldü.`, "ok");
+            return parsed.map((item, i) => ({
+              ...item,
+              sourceUrl: item.sourceUrl || rawEntries[i]?.link || rawEntries[i]?.url || DATA_SOURCES[categoryId]?.officialPortals?.[0],
+              fetchMethod: `${sourceTag} + Detaylandırıldı`
+            }));
+          }
+        }
+      } catch {
+        // AI zenginleştirme başarısız olursa aşağıdaki zengin yerel eşleyici çalışır
+      }
+
+      appendScanLog("AI zenginleştirme zaman aşımına uğradı; yerel detaylı ayrıştırıcı kullanılıyor.", "warn");
+      return rawEntries.map(r => mapRssItemToCategorySchema(categoryId, r, r.host || sourceTag));
+    }
+
+    /**
+     * Katman 1A: Kategorinin tüm RSS akışlarını paralel tarar ve detaylı şemaya işler
      */
     async function fetchLiveRSS(categoryId) {
       const feeds = getCategoryRssList(categoryId);
@@ -2189,7 +2484,7 @@
 
       appendScanLog(`Katman 1A: ${feeds.length} canlı RSS akışı paralel taranıyor...`, "info");
       const results = await Promise.allSettled(feeds.map(url => fetchRssItemsFromUrl(url)));
-      const collected = [];
+      const rawCollected = [];
 
       results.forEach((res, idx) => {
         const feedUrl = feeds[idx];
@@ -2211,17 +2506,31 @@
         appendScanLog(`RSS okundu (${host}): ${items.length} kayıt, ${unseen.length} yeni.`, unseen.length > 0 ? "ok" : "info");
 
         unseen.slice(0, 3).forEach(it => {
-          collected.push(mapRssItemToCategorySchema(categoryId, it, host));
+          rawCollected.push({ ...it, host });
         });
       });
 
-      return collected.slice(0, 5);
+      if (rawCollected.length === 0) return [];
+      const topRaw = rawCollected.slice(0, 4);
+      return await enrichScrapedItemsWithGemini(categoryId, topRaw, "Canlı RSS");
     }
 
     function mapRssItemToCategorySchema(categoryId, rssItem, host) {
-      const baseDate = rssItem.pubDate ? formatDateTr(rssItem.pubDate) : "Canlı RSS";
+      const baseDate = rssItem.pubDate ? formatDateTr(rssItem.pubDate) : "Kasım 2026";
+      const cleanSummary = (rssItem.summary || rssItem.bodyText || "").trim();
+      const detailedSummary = cleanSummary.length >= 60
+        ? cleanSummary.slice(0, 460)
+        : `${rssItem.title} başlıklı içerik ${host} kaynağından canlı olarak çekildi. Güncel sektör ve sinema gündemindeki tam ayrıntılar, alıntılar ve resmi takvim bilgileri için kaynak sayfasını inceleyebilirsiniz.`;
+      const keyPoints = extractSentencesAsPoints(cleanSummary, 3);
+      if (rssItem.categories && rssItem.categories.length > 0 && keyPoints.length < 2) {
+        keyPoints.push(`İlgili konular: ${rssItem.categories.join(", ")}`);
+      }
+      if (rssItem.author) {
+        keyPoints.push(`Yazar / Editör: ${rssItem.author}`);
+      }
+
       if (categoryId === "festival_grants") {
-        const combined = `${rssItem.title} ${rssItem.summary}`;
+        const combined = `${rssItem.title} ${cleanSummary}`;
         const regionGuess = /sundance|idfa|documentary|lab|script/i.test(combined)
           ? "Belgesel & Geliştirme"
           : /cineuropa|eurimages|berlin|rotterdam|cnc|media|europe/i.test(combined)
@@ -2231,21 +2540,26 @@
           title: rssItem.title,
           institution: host.toUpperCase(),
           region: regionGuess,
-          fundCategory: "Güncel Fon & Hibe Duyurusu",
+          fundCategory: (rssItem.categories && rssItem.categories[0]) || "Güncel Fon & Hibe Duyurusu",
           amount: extractMoneyFromText(combined),
           deadline: extractDeadlineFromText(combined),
-          eligibility: rssItem.summary || "Başvuru koşulları ve uygun ülke listesi için resmi duyuru bağlantısını inceleyin.",
-          supportedWorks: "Bağımsız uzun metraj, belgesel ve uluslararası ortak yapım projeleri.",
-          sourceUrl: rssItem.link,
+          eligibility: detailedSummary,
+          supportedWorks: "Bağımsız uzun metraj kurmaca, yaratıcı belgesel ve uluslararası ortak yapım projeleri.",
+          keyPoints,
+          editorialNote: "Resmi duyurudaki başvuru rehberi ve uygun ülke listesini son tarihten önce kontrol edin.",
+          sourceUrl: rssItem.link || rssItem.url,
           fetchMethod: `Canlı RSS (${host})`
         };
       }
       if (categoryId === "indiewire_news") {
         return {
           title: rssItem.title,
-          topic: /award|oscar|critic/i.test(rssItem.title) ? "Ödül Sezonu" : /festival|cannes|sundance|berlin|tiff/i.test(rssItem.title) ? "Festival" : "Sektör",
+          topic: /award|oscar|critic/i.test(rssItem.title) ? "Ödül Sezonu" : /festival|cannes|sundance|berlin|tiff/i.test(rssItem.title) ? "Festival" : /review|essay/i.test(rssItem.title) ? "Eleştiri" : "Sektör",
           date: baseDate,
-          summary: rssItem.summary || "IndieWire güncel sinema akışından canlı çekilen haber.",
+          author: rssItem.author || "IndieWire Editöryal",
+          summary: detailedSummary,
+          keyPoints,
+          editorialNote: "Uluslararası bağımsız sinema gündeminden taze kaynak; haber veya karusel içeriğine uygundur.",
           sourceUrl: rssItem.link,
           fetchMethod: "Canlı RSS (IndieWire)"
         };
@@ -2255,10 +2569,11 @@
           title: rssItem.title,
           rtType: "RT Haberler",
           year: baseDate,
-          director: "RT Editöryal",
+          director: rssItem.author || "RT Editöryal",
           tomatometer: "Canlı",
-          audienceScore: "Haber",
-          summary: rssItem.summary || "Rotten Tomatoes editöryal akışından canlı çekilen haber.",
+          audienceScore: "Editöryal",
+          summary: detailedSummary,
+          keyPoints,
           sourceUrl: rssItem.link,
           fetchMethod: "Canlı RSS (Rotten Tomatoes)"
         };
@@ -2266,9 +2581,11 @@
       if (categoryId === "filmhafizasi_news") {
         return {
           title: rssItem.title,
-          tag: "Haber",
+          tag: /dosya|inceleme|analiz/i.test(rssItem.title) ? "Dosya" : /keşif|öneri|liste/i.test(rssItem.title) ? "Keşif" : "Haber",
           date: baseDate,
-          summary: rssItem.summary || "Fil'm Hafızası güncel içerik akışından canlı çekildi.",
+          author: rssItem.author || "Fil'm Hafızası",
+          summary: detailedSummary,
+          keyPoints,
           sourceUrl: rssItem.link,
           fetchMethod: "Canlı RSS (Fil'm Hafızası)"
         };
@@ -2276,11 +2593,12 @@
       if (categoryId === "turkey_festivals") {
         return {
           title: rssItem.title,
-          festival: host,
+          festival: (rssItem.categories && rssItem.categories[0]) || host,
           dates: baseDate,
-          status: "Güncel Haber",
-          summary: rssItem.summary || "Türkiye sinema ve festival gündeminden canlı akış.",
-          competitionFilms: [],
+          status: /başvuru|çağrı/i.test(rssItem.title) ? "Başvuru Açık" : /yarışma|ödül|seçki/i.test(rssItem.title) ? "Yarışma Seçkisi" : "Güncel Haber",
+          summary: detailedSummary,
+          keyPoints,
+          competitionFilms: rssItem.categories && rssItem.categories.length > 0 ? rssItem.categories.map(c => `Öne Çıkan Başlık: ${c}`) : [],
           sourceUrl: rssItem.link,
           fetchMethod: `Canlı RSS (${host})`
         };
@@ -2288,11 +2606,12 @@
       if (categoryId === "world_festivals") {
         return {
           title: rssItem.title,
-          continent: "Avrupa",
-          festival: host,
+          continent: detectContinentFromText(`${rssItem.title} ${cleanSummary}`),
+          festival: (rssItem.categories && rssItem.categories[0]) || host,
           dates: baseDate,
-          summary: rssItem.summary || "Uluslararası festival gündeminden canlı akış.",
-          highlights: "Resmi kaynak bağlantısından tam metne ulaşabilirsiniz.",
+          summary: detailedSummary,
+          highlights: keyPoints[0] || "Festival programı ve resmi duyuru ayrıntıları kaynak sayfasında yer almaktadır.",
+          keyPoints,
           sourceUrl: rssItem.link,
           fetchMethod: `Canlı RSS (${host})`
         };
@@ -2300,11 +2619,12 @@
       if (categoryId === "box_office") {
         return {
           title: rssItem.title,
-          segment: "Global Gişe",
-          rank: "Canlı Haber",
-          metrics: baseDate,
+          segment: /türkiye|yerli|tl/i.test(`${rssItem.title} ${cleanSummary}`) ? "Türkiye Gişe" : /vizyon|upcoming|release/i.test(`${rssItem.title} ${cleanSummary}`) ? "Yakında Vizyonda" : "Global Gişe",
+          rank: "Canlı Rapor",
+          metrics: extractMoneyFromText(cleanSummary) !== "Resmi çağrıda belirtilen hibe tutarı" ? extractMoneyFromText(cleanSummary) : baseDate,
           theaters: host,
-          summary: rssItem.summary || "Gişe ve vizyon gündeminden canlı akış.",
+          summary: detailedSummary,
+          keyPoints,
           sourceUrl: rssItem.link,
           fetchMethod: `Canlı RSS (${host})`
         };
@@ -2313,10 +2633,10 @@
         return {
           title: rssItem.title,
           periodTag: "Haftanın Posteri",
-          artist: "MUBI Notebook Seçkisi",
-          year: baseDate,
-          artistNote: rssItem.summary || "MUBI Notebook tasarım ve afiş kürasyonundan canlı kayıt.",
-          selectionReason: "MUBI Notebook güncel akışından otomatik alındı.",
+          artist: rssItem.author || "MUBI Notebook Seçkisi",
+          year: extractYearFromText(`${rssItem.title} ${cleanSummary}`, baseDate),
+          artistNote: detailedSummary,
+          selectionReason: keyPoints[0] || "MUBI Notebook görsel tasarım kürasyonundan canlı olarak aktarıldı.",
           palette: { bg: "#2B3A35", accent: "#D47254", ink: "#F6F3EC", motif: "compass" },
           sourceUrl: rssItem.link,
           fetchMethod: "Canlı RSS (MUBI Notebook)"
@@ -2325,12 +2645,13 @@
       if (categoryId === "anime_acclaimed") {
         return {
           title: rssItem.title,
-          animeType: /film|movie/i.test(rssItem.title) ? "Anime Film" : "Anime Dizi",
-          year: baseDate,
-          director: "Anime News Network",
-          studio: "Güncel Seçki",
+          animeType: /film|movie/i.test(`${rssItem.title} ${cleanSummary}`) ? "Anime Film" : "Anime Dizi",
+          year: extractYearFromText(`${rssItem.title} ${cleanSummary}`, baseDate),
+          director: rssItem.author || "Anime News Network",
+          studio: (rssItem.categories && rssItem.categories[0]) || "Güncel Seçki",
           score: "Canlı Gündem",
-          summary: rssItem.summary || "Uluslararası anime dünyasından canlı çekilen haber.",
+          summary: detailedSummary,
+          keyPoints,
           awards: [],
           festivals: [],
           sourceUrl: rssItem.link,
@@ -2339,11 +2660,12 @@
       }
       return {
         title: rssItem.title,
-        mubiCategory: "Dünya Sineması",
-        year: baseDate,
-        director: "MUBI Seçkisi",
+        mubiCategory: (rssItem.categories && rssItem.categories[0]) || "Dünya Sineması",
+        year: extractYearFromText(`${rssItem.title} ${cleanSummary}`, baseDate),
+        director: rssItem.author || "MUBI Notebook",
         countryRuntime: host,
-        summary: rssItem.summary || "MUBI Notebook akışından canlı çekildi.",
+        summary: detailedSummary,
+        keyPoints,
         awards: [],
         festivals: [],
         sourceUrl: rssItem.link,
@@ -2352,76 +2674,79 @@
     }
 
     /**
-     * Katman 1B: Festival Fonları için resmi HTML portallarını güvenli DOMParser ile tarar
+     * Katman 1B: Festival Fonları için resmi HTML portallarını paragraf ve meta verisiyle birlikte tarar
      */
     async function fetchOfficialHtmlPortals(categoryId) {
       const portals = (DATA_SOURCES[categoryId]?.officialPortals || []).slice(0, 4);
       if (portals.length === 0) return [];
 
-      appendScanLog(`Katman 1B: ${portals.length} resmi fon portalı HTML başlık taraması yapılıyor...`, "info");
-      const found = [];
+      appendScanLog(`Katman 1B: ${portals.length} resmi fon portalında detaylı içerik taraması yapılıyor...`, "info");
+      const rawFound = [];
 
       const results = await Promise.allSettled(
         portals.map(async (url) => {
-          const res = await fetchWithTimeout(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`, {}, 6000);
+          const res = await fetchWithTimeout(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`, {}, 6500);
           if (!res.ok) return null;
           const html = await res.text();
           if (!html || html.length < 150) return null;
           const doc = new DOMParser().parseFromString(html, "text/html");
-          const pageTitle = stripHtmlTags(doc.querySelector("h1, title")?.textContent || "").slice(0, 110);
-          const metaDesc = stripHtmlTags(doc.querySelector('meta[name="description"]')?.getAttribute("content") || "").slice(0, 260);
+          const pageTitle = stripHtmlTags(doc.querySelector("h1, title")?.textContent || "").slice(0, 120);
+          const metaDesc = stripHtmlTags(
+            doc.querySelector('meta[name="description"]')?.getAttribute("content") ||
+            doc.querySelector('meta[property="og:description"]')?.getAttribute("content") || ""
+          );
+          const paragraphs = [...doc.querySelectorAll("main p, article p, p")]
+            .map(p => stripHtmlTags(p.textContent || ""))
+            .filter(t => t.length > 45 && !/cookie|privacy policy|javascript/i.test(t))
+            .slice(0, 4)
+            .join(" ");
+          const bodyText = `${metaDesc} ${paragraphs}`.trim().slice(0, 850);
           if (!pageTitle || pageTitle.length < 6) return null;
-          return { url, pageTitle, metaDesc };
+          return { url, title: pageTitle, summary: bodyText, host: new URL(url).hostname.replace(/^www\./, "") };
         })
       );
 
       for (const r of results) {
         if (r.status === "fulfilled" && r.value) {
-          const { url, pageTitle, metaDesc } = r.value;
-          const host = new URL(url).hostname.replace(/^www\./, "");
-          if (!nosql.hasKey(makeItemKey(categoryId, pageTitle))) {
-            found.push({
-              title: pageTitle,
-              institution: host.toUpperCase(),
-              region: /iffr|berlinale|coe|torino|idfa|visions|cnc|europa/i.test(host) ? "Avrupa Fonları" : "Dünya & Kıtalararası",
-              fundCategory: "Resmi Portal Güncellemesi",
-              amount: extractMoneyFromText(`${pageTitle} ${metaDesc}`),
-              deadline: extractDeadlineFromText(`${pageTitle} ${metaDesc}`),
-              eligibility: metaDesc || "Güncel başvuru koşulları ve son tarihler resmi portal üzerinden duyurulmaktadır.",
-              supportedWorks: "Uluslararası bağımsız sinema ve ortak yapım programları.",
-              sourceUrl: url,
-              fetchMethod: `Resmi Portal (${host})`
-            });
+          if (!nosql.hasKey(makeItemKey(categoryId, r.value.title))) {
+            rawFound.push(r.value);
           }
         }
       }
 
-      if (found.length > 0) {
-        appendScanLog(`Katman 1B tamamlandı: ${found.length} resmi portal kaydı çıkarıldı.`, "ok");
+      if (rawFound.length > 0) {
+        appendScanLog(`Katman 1B: ${rawFound.length} resmi portaldan paragraf verisi alındı, detaylandırılıyor...`, "ok");
+        return await enrichScrapedItemsWithGemini(categoryId, rawFound.slice(0, 3), "Resmi Portal");
       } else {
         appendScanLog("Katman 1B: Resmi portallarda yeni başlık bulunmadı, Katman 2'ye geçiliyor.", "info");
       }
-      return found.slice(0, 3);
+      return [];
     }
 
     /**
-     * Katman 2: Gemini Canlı Web Tarama (Önce Google Search grounding, hata olursa standart JSON yedek)
+     * Katman 2: Gemini Canlı Web Tarama (Derinleştirilmiş Türkçe editöryal kart üretimi)
      */
     async function fetchViaGemini(categoryId, excludeTitles) {
       const cat = CATEGORIES.find(c => c.id === categoryId);
       const sources = DATA_SOURCES[categoryId];
       if (!cat || !sources) return [];
 
-      appendScanLog("Katman 2: Gemini canlı web tarama motoru sorgulanıyor...", "info");
+      appendScanLog("Katman 2: Gemini canlı web tarama motorundan detaylı kayıtlar isteniyor...", "info");
 
       const schemaHint = getGeminiSchemaHint(categoryId);
-      const excludeList = excludeTitles.slice(0, 25).join(" | ");
-      const prompt = `Sen Türkçe çalışan profesyonel bir sinema editörüsün.
+      const excludeList = excludeTitles.slice(0, 30).join(" | ");
+      const prompt = `Sen Türkçe çalışan uzman bir sinema küratörü ve editörüsün.
 Kategori: "${cat.title}"
 Referans Kaynaklar: ${sources.officialPortals.slice(0, 5).join(", ")}
-GÖREV: Bu kaynaklardan 3 adet YENİ, doğrulanmış ve güncel Türkçe kayıt üret.
-KESİNLİKLE aşağıdaki daha önce gösterilmiş başlıkları tekrar ETME: [${excludeList}]
-ÇIKTI FORMATI: Yalnızca geçerli bir JSON dizisi ([{...}]) döndür. Markdown kod bloğu veya açıklama yazma.
+GÖREV: Bu kaynaklara uygun 3 adet YENİ, doğrulanmış, kapsamlı ve zengin detaylı Türkçe kayıt üret.
+ÖNEMLİ DETAY KURALLARI:
+- Kesinlikle sadece başlık veya tek cümlelik yüzeysel özet VERME!
+- "summary" alanı mutlaka EN AZ 3-4 zengin, bilgi dolu Türkçe cümle (220-420 karakter) olsun.
+- "keyPoints" dizisinde mutlaka 2-3 adet somut, veri/bilgi içeren madde ver.
+- "editorialNote" alanında bu içeriğin sinema sayfası için neden değerli olduğuna dair 1 cümlelik editör notu ekle.
+- Kategoriye ait tüm künye alanlarını (yönetmen, yapım yılı, süre/ülke, aldığı ödüller, yarıştığı festivaller, yarışma filmleri, gişe rakamları, fon tutarı, son başvuru tarihi, başvuru koşulları vb.) eksiksiz doldur.
+- KESİNLİKLE şu daha önce gösterilmiş başlıkları tekrar ETME: [${excludeList}]
+- ÇIKTI FORMATI: Yalnızca geçerli bir JSON dizisi ([{...}]) döndür. Markdown kod bloğu veya ekstra açıklama yazma.
 Beklenen JSON alanları: ${schemaHint}`;
 
       const apiKey = ""; // Canvas runtime otomatik sağlar
@@ -2451,7 +2776,7 @@ Beklenen JSON alanları: ${schemaHint}`;
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(attempt.body)
-            }, 12000);
+            }, 13000);
 
             if (!res.ok) {
               if (res.status === 429 && retry === 0) {
@@ -2465,7 +2790,7 @@ Beklenen JSON alanları: ${schemaHint}`;
             const rawText = data?.candidates?.[0]?.content?.parts?.map(p => p.text || "").join("") || "";
             const parsed = extractJsonArrayFromText(rawText);
             if (Array.isArray(parsed) && parsed.length > 0) {
-              appendScanLog(`Katman 2 başarılı (${attempt.label}): ${parsed.length} kayıt alındı.`, "ok");
+              appendScanLog(`Katman 2 başarılı (${attempt.label}): ${parsed.length} detaylı kayıt alındı.`, "ok");
               return parsed.map(item => ({
                 ...item,
                 sourceUrl: item.sourceUrl || sources.officialPortals[0],
@@ -2497,34 +2822,35 @@ Beklenen JSON alanları: ${schemaHint}`;
 
     function getGeminiSchemaHint(categoryId) {
       const hints = {
-        mubi_categories: `{"title","mubiCategory","year","director","countryRuntime","summary","awards":[""],"festivals":[""],"sourceUrl"}`,
-        world_festivals: `{"title","continent":"Avrupa|Kuzey Amerika|Güney Amerika|Asya|Afrika|Okyanusya","festival","dates","summary","highlights","sourceUrl"}`,
-        turkey_festivals: `{"title","festival","dates","status":"Güncel Haber|Yarışma Seçkisi|Başvuru Açık","summary","competitionFilms":[""],"sourceUrl"}`,
-        box_office: `{"title","segment":"Global Gişe|Türkiye Gişe|Yakında Vizyonda","rank","metrics","theaters","summary","sourceUrl"}`,
-        mubi_posters: `{"title","periodTag":"Haftanın Posteri|Ayın Posteri","artist","year","artistNote","selectionReason","palette":{"bg":"#2B3A35","accent":"#D47254","ink":"#F6F3EC","motif":"moon"},"sourceUrl"}`,
-        festival_grants: `{"title","institution","region":"Avrupa Fonları|Dünya & Kıtalararası|Belgesel & Geliştirme","fundCategory","amount","deadline","eligibility","supportedWorks","sourceUrl"}`,
-        indiewire_news: `{"title","topic":"Sektör|Ödül Sezonu|Festival|Eleştiri","date","summary","sourceUrl"}`,
-        anime_acclaimed: `{"title","animeType":"Anime Film|Anime Dizi","year","director","studio","score","summary","awards":[""],"festivals":[""],"sourceUrl"}`,
-        rotten_tomatoes: `{"title","rtType":"En Yüksek Puanlı|RT Haberler","year","director","tomatometer","audienceScore","summary","sourceUrl"}`,
-        filmhafizasi_news: `{"title","tag":"Haber|Keşif|Dosya","date","summary","sourceUrl"}`
+        mubi_categories: `{"title","mubiCategory","year","director","countryRuntime","summary","keyPoints":[""],"editorialNote","awards":[""],"festivals":[""],"sourceUrl"}`,
+        world_festivals: `{"title","continent":"Avrupa|Kuzey Amerika|Güney Amerika|Asya|Afrika|Okyanusya","festival","dates","summary","highlights","keyPoints":[""],"editorialNote","sourceUrl"}`,
+        turkey_festivals: `{"title","festival","dates","status":"Güncel Haber|Yarışma Seçkisi|Başvuru Açık","summary","competitionFilms":[""],"keyPoints":[""],"editorialNote","sourceUrl"}`,
+        box_office: `{"title","segment":"Global Gişe|Türkiye Gişe|Yakında Vizyonda","rank","metrics","theaters","summary","keyPoints":[""],"editorialNote","sourceUrl"}`,
+        mubi_posters: `{"title","periodTag":"Haftanın Posteri|Ayın Posteri","artist","year","artistNote","selectionReason","editorialNote","palette":{"bg":"#2B3A35","accent":"#D47254","ink":"#F6F3EC","motif":"moon"},"sourceUrl"}`,
+        festival_grants: `{"title","institution","region":"Avrupa Fonları|Dünya & Kıtalararası|Belgesel & Geliştirme","fundCategory","amount","deadline","eligibility","supportedWorks","keyPoints":[""],"editorialNote","sourceUrl"}`,
+        indiewire_news: `{"title","topic":"Sektör|Ödül Sezonu|Festival|Eleştiri","date","author","summary","keyPoints":[""],"editorialNote","sourceUrl"}`,
+        anime_acclaimed: `{"title","animeType":"Anime Film|Anime Dizi","year","director","studio","score","summary","keyPoints":[""],"editorialNote","awards":[""],"festivals":[""],"sourceUrl"}`,
+        rotten_tomatoes: `{"title","rtType":"En Yüksek Puanlı|RT Haberler","year","director","tomatometer","audienceScore","summary","keyPoints":[""],"editorialNote","sourceUrl"}`,
+        filmhafizasi_news: `{"title","tag":"Haber|Keşif|Dosya","date","author","summary","keyPoints":[""],"editorialNote","sourceUrl"}`
       };
-      return hints[categoryId] || `{"title","summary","sourceUrl"}`;
+      return hints[categoryId] || `{"title","summary","keyPoints":[""],"editorialNote","sourceUrl"}`;
     }
 
     /* ============================================================================
        9. KATEGORİ & TOPLU YENİLEME ORKESTRASYONU
+       Mevcut ekrandaki kayıtlar YALNIZCA bu yenileme çağrılarında arşive alınır.
        ============================================================================ */
     async function fetchAndSaveCategory(categoryId) {
       const excludeTitles = nosql.getSeenTitlesForCategory(categoryId);
       const collected = [];
 
-      // KATMAN 1A: Canlı RSS
+      // KATMAN 1A: Canlı RSS + AI Detaylandırma
       if (getCategoryRssList(categoryId).length > 0) {
         const rssItems = await fetchLiveRSS(categoryId);
         if (rssItems.length > 0) collected.push(...rssItems);
       }
 
-      // KATMAN 1B: Resmi HTML Portalları (Festival Fonları'nda RSS < 3 ise)
+      // KATMAN 1B: Resmi HTML Portalları + AI Detaylandırma (Festival Fonları'nda RSS < 3 ise)
       if (categoryId === "festival_grants" && collected.length < 3) {
         const htmlItems = await fetchOfficialHtmlPortals(categoryId);
         if (htmlItems.length > 0) collected.push(...htmlItems);
@@ -2537,15 +2863,15 @@ Beklenen JSON alanları: ${schemaHint}`;
         if (aiItems.length > 0) collected.push(...aiItems);
       }
 
-      // KATMAN 3: Doğrulanmış Yedek Havuz (NoSQL'de görülmemiş kayıtlar)
+      // KATMAN 3: Doğrulanmış Detaylı Yedek Havuz (NoSQL'de görülmemiş kayıtlar)
       if (collected.length === 0) {
-        appendScanLog("Katman 3: Doğrulanmış çevrimdışı içerik havuzundan görülmemiş kayıtlar taranıyor...", "info");
+        appendScanLog("Katman 3: Doğrulanmış detaylı içerik havuzundan görülmemiş kayıtlar taranıyor...", "info");
         const pool = FALLBACK_RESERVE_POOL[categoryId] || [];
         const unseenReserve = pool.filter(item => !nosql.hasKey(makeItemKey(categoryId, item.title)));
         if (unseenReserve.length > 0) {
           const badgeLabel = categoryId === "festival_grants" ? "Doğrulanmış Fon Rehberi" : "Doğrulanmış Yedek Havuz";
           collected.push(...unseenReserve.slice(0, 3).map(it => ({ ...it, fetchMethod: badgeLabel })));
-          appendScanLog(`Katman 3 hazır: ${Math.min(3, unseenReserve.length)} yeni doğrulanmış kayıt seçildi.`, "ok");
+          appendScanLog(`Katman 3 hazır: ${Math.min(3, unseenReserve.length)} yeni detaylı kayıt seçildi.`, "ok");
         } else {
           const unseenSeed = (INITIAL_SEED_DATA[categoryId] || []).filter(item => !nosql.hasKey(makeItemKey(categoryId, item.title)));
           if (unseenSeed.length > 0) {
@@ -2555,21 +2881,26 @@ Beklenen JSON alanları: ${schemaHint}`;
         }
       }
 
+      // YENİLE BUTONUNA BASILDIĞI İÇİN: Mevcut ekrandaki aktif kayıtları NoSQL Arşivine taşı
+      const archivedNow = await nosql.archiveActiveItems(categoryId);
+      if (archivedNow > 0) {
+        appendScanLog(`Önceki ${archivedNow} aktif kayıt NoSQL Arşivine taşındı.`, "info");
+      }
+
       const totalAdded = [];
       let totalDuplicates = 0;
 
       for (const candidate of collected) {
         const method = candidate.fetchMethod || "Canlı Tarama";
-        const { newlySaved, duplicatesFiltered } = await nosql.saveItems(categoryId, [candidate], method);
+        const { newlySaved, duplicatesFiltered } = await nosql.saveItems(categoryId, [candidate], method, "active");
         totalAdded.push(...newlySaved);
         totalDuplicates += duplicatesFiltered;
       }
 
-      if (totalAdded.length > 0) {
-        state.sessionItems[categoryId] = [...totalAdded, ...state.sessionItems[categoryId]];
-      }
+      // Ekranda yalnızca yeni çekilen aktif kayıtları göster
+      state.sessionItems[categoryId] = nosql.getActiveItemsForCategory(categoryId);
 
-      return { addedCount: totalAdded.length, duplicateCount: totalDuplicates };
+      return { addedCount: totalAdded.length, duplicateCount: totalDuplicates, archivedNow };
     }
 
     async function refreshCategoryData(categoryId) {
@@ -2579,24 +2910,25 @@ Beklenen JSON alanları: ${schemaHint}`;
       renderLoadingSkeletons();
 
       const catObj = CATEGORIES.find(c => c.id === categoryId);
-      resetScanDiagnostics(`${catObj ? catObj.shortName : categoryId} için 3 katmanlı canlı tarama başlatıldı...`);
+      resetScanDiagnostics(`${catObj ? catObj.shortName : categoryId} için canlı tarama ve arşivleme başlatıldı...`);
 
       try {
-        const { addedCount, duplicateCount } = await fetchAndSaveCategory(categoryId);
+        const { addedCount, duplicateCount, archivedNow } = await fetchAndSaveCategory(categoryId);
+        const archMsg = archivedNow > 0 ? `${archivedNow} önceki kayıt arşive alındı · ` : "";
 
         if (addedCount > 0) {
-          const dupMsg = duplicateCount > 0 ? ` · ${duplicateCount} mükerrer NoSQL ile elendi` : "";
-          const summaryMsg = `Tamamlandı: ${addedCount} yepyeni kayıt eklendi${dupMsg}.`;
+          const dupMsg = duplicateCount > 0 ? ` · ${duplicateCount} mükerrer elendi` : "";
+          const summaryMsg = `${archMsg}${addedCount} yeni detaylı kayıt yüklendi${dupMsg}.`;
           appendScanLog(summaryMsg, "ok");
           finalizeScanDiagnostics(summaryMsg, "ok");
-          showToast(`${addedCount} yeni içerik eklendi${dupMsg}`, "success");
+          showToast(summaryMsg, "success");
         } else if (duplicateCount > 0) {
-          const msg = `Taranan ${duplicateCount} kaydın tamamı NoSQL arşivinizde zaten mevcuttu — mükerrer gösterilmedi.`;
+          const msg = `${archMsg}Taranan ${duplicateCount} kayıt arşivde zaten mevcuttu — mükerrer gösterilmedi.`;
           appendScanLog(msg, "warn");
           finalizeScanDiagnostics(msg, "warn");
           showToast(msg, "warn");
         } else {
-          const msg = "Tüm güncel kaynaklardaki içerikler NoSQL arşivinizde kayıtlı. Yeni duyurular için daha sonra tekrar deneyin.";
+          const msg = `${archMsg}Kaynaklardaki mevcut içerikler arşivinizde kayıtlı. Arşivden istediğiniz kaydı geri gönderebilirsiniz.`;
           appendScanLog(msg, "warn");
           finalizeScanDiagnostics(msg, "warn");
           showToast(msg, "info");
@@ -2631,9 +2963,10 @@ Beklenen JSON alanları: ${schemaHint}`;
       state.cancelRefreshAll = false;
       updateRefreshButtonState(true);
       updateRefreshAllButtonUI(true, 0, CATEGORIES.length, "Başlatılıyor...");
-      resetScanDiagnostics("Tüm 10 kategori için toplu canlı veri taraması başlatıldı...");
+      resetScanDiagnostics("Tüm 10 kategori için toplu arşivleme ve canlı veri taraması başlatıldı...");
 
       let grandAdded = 0;
+      let grandArchived = 0;
       let grandDuplicates = 0;
       let completedCount = 0;
 
@@ -2644,18 +2977,19 @@ Beklenen JSON alanları: ${schemaHint}`;
           state.loadingCategory = cat.id;
           updateRefreshAllButtonUI(true, i, CATEGORIES.length, `${cat.num} · ${cat.shortName}`);
           renderSidebarNav();
-          appendScanLog(`━━ [${i + 1}/${CATEGORIES.length}] ${cat.shortName} taranıyor...`, "info");
+          appendScanLog(`━━ [${i + 1}/${CATEGORIES.length}] ${cat.shortName} yenileniyor...`, "info");
 
           try {
-            const { addedCount, duplicateCount } = await fetchAndSaveCategory(cat.id);
+            const { addedCount, duplicateCount, archivedNow } = await fetchAndSaveCategory(cat.id);
             grandAdded += addedCount;
+            grandArchived += archivedNow;
             grandDuplicates += duplicateCount;
             completedCount++;
 
             if (addedCount > 0) {
-              appendScanLog(`${cat.shortName}: +${addedCount} yeni kayıt eklendi${duplicateCount > 0 ? ` (${duplicateCount} mükerrer elendi)` : ""}.`, "ok");
+              appendScanLog(`${cat.shortName}: ${archivedNow} arşivlendi, +${addedCount} yeni detaylı kayıt eklendi.`, "ok");
             } else {
-              appendScanLog(`${cat.shortName}: Yeni görülmemiş kayıt bulunamadı.`, "warn");
+              appendScanLog(`${cat.shortName}: ${archivedNow} arşivlendi, yeni görülmemiş kayıt bulunamadı.`, "warn");
             }
           } catch {
             appendScanLog(`${cat.shortName}: Geçici bağlantı hatası, sonraki kategoriye geçiliyor.`, "err");
@@ -2670,7 +3004,7 @@ Beklenen JSON alanları: ${schemaHint}`;
 
         const stoppedNote = state.cancelRefreshAll ? " (durduruldu)" : "";
         const dupNote = grandDuplicates > 0 ? ` · ${grandDuplicates} mükerrer elendi` : "";
-        const finalMsg = `Toplu tarama tamamlandı${stoppedNote}: ${completedCount}/${CATEGORIES.length} kategoriden toplam ${grandAdded} yeni içerik eklendi${dupNote}.`;
+        const finalMsg = `Toplu yenileme tamamlandı${stoppedNote}: ${grandArchived} önceki kayıt arşive alındı, ${completedCount}/${CATEGORIES.length} kategoriden ${grandAdded} yeni içerik yüklendi${dupNote}.`;
         appendScanLog(finalMsg, grandAdded > 0 ? "ok" : "warn");
         finalizeScanDiagnostics(finalMsg, grandAdded > 0 ? "ok" : "warn");
         showToast(finalMsg, grandAdded > 0 ? "success" : "info");
@@ -2784,7 +3118,7 @@ Beklenen JSON alanları: ${schemaHint}`;
       if (!cat) return;
 
       const allItems = state.sessionItems[cat.id] || [];
-      const archivedCount = nosql.getRecordsByCategory(cat.id).length;
+      const archivedCount = nosql.getArchivedCount(cat.id);
 
       const numBadge = document.getElementById("catNumBadge");
       const titleEl = document.getElementById("catTitle");
@@ -2795,8 +3129,8 @@ Beklenen JSON alanları: ${schemaHint}`;
       if (numBadge) numBadge.textContent = `${cat.num} / 10`;
       if (titleEl) titleEl.textContent = cat.title;
       if (descEl) descEl.textContent = cat.description;
-      if (sessCountEl) sessCountEl.textContent = `${allItems.length} yeni kayıt`;
-      if (archCountEl) archCountEl.textContent = `${archivedCount} NoSQL arşivde`;
+      if (sessCountEl) sessCountEl.textContent = `${allItems.length} aktif kayıt`;
+      if (archCountEl) archCountEl.textContent = `${archivedCount} arşivde`;
 
       // Alt filtre çubuğu
       const subFilterBar = document.getElementById("subFilterBar");
@@ -2889,19 +3223,19 @@ Beklenen JSON alanları: ${schemaHint}`;
             </div>
             <div class="space-y-1.5 max-w-md mx-auto">
               <h3 class="font-serif text-xl font-medium text-espresso">
-                ${isFilteredEmpty ? `"${escapeHtml(state.activeSubFilter)}" filtresinde yeni kayıt yok` : "Önceki oturumdaki tüm içerikler NoSQL belleğinde"}
+                ${isFilteredEmpty ? `"${escapeHtml(state.activeSubFilter)}" filtresinde aktif kayıt yok` : "Bu kategoride şu an aktif kayıt bulunmuyor"}
               </h3>
               <p class="text-[13.5px] text-stonewarm leading-relaxed">
                 ${isFilteredEmpty
-                  ? "Bu alt kategoride henüz yeni veri yok. Tümü filtresine dönebilir veya canlı veri çekebilirsiniz."
-                  : `Bu kategoride daha önce incelediğiniz ${archivedCount} kayıt mükerrer engelleme gereği tekrar gösterilmiyor. Yalnızca yeni içerik çekmek için aşağıdaki butonu kullanın.`}
+                  ? "Bu alt kategoride şu an gösterilen bir kayıt yok. Tümü filtresine dönebilir veya canlı veri çekebilirsiniz."
+                  : `Önceki yenilemede arşive alınan ${archivedCount} kayıt NoSQL belleğinde saklanıyor. Yeni veri çekebilir veya arşivdeki dilediğiniz kaydı tekrar bu kategoriye geri gönderebilirsiniz.`}
               </p>
             </div>
             <div class="flex flex-wrap items-center justify-center gap-2.5 pt-2">
               ${isFilteredEmpty
                 ? `<button type="button" id="emptyResetFilterBtn" class="px-4 py-2.5 rounded-2xl bg-espresso text-porcelain text-[13px] font-semibold">Tüm Kayıtları Göster</button>`
                 : `<button type="button" id="emptyRefreshBtn" class="px-4 py-2.5 rounded-2xl bg-terracotta hover:bg-terracottaDark text-porcelain text-[13px] font-semibold">Yeni Verileri Canlı Çek</button>
-                   <button type="button" id="emptyArchiveBtn" class="px-4 py-2.5 rounded-2xl bg-linen border border-hairline text-espresso text-[13px] font-semibold">Arşivdeki ${archivedCount} Kaydı Gör</button>`
+                   <button type="button" id="emptyArchiveBtn" class="px-4 py-2.5 rounded-2xl bg-linen border border-hairline text-espresso text-[13px] font-semibold">Arşivden Kayıt Geri Getir (${archivedCount})</button>`
               }
             </div>
           </div>
@@ -3071,6 +3405,7 @@ Beklenen JSON alanları: ${schemaHint}`;
         topBadges = `
           <span class="font-mono text-[10.5px] font-semibold px-2.5 py-0.5 rounded-full bg-terracotta/12 text-terracotta">${escapeHtml(item.topic || "IndieWire")}</span>
           ${item.date ? `<span class="font-mono text-[10.5px] text-stonewarm">${escapeHtml(item.date)}</span>` : ""}
+          ${item.author ? `<span class="font-mono text-[10.5px] px-2 py-0.5 rounded-full bg-sand text-stonewarm">${escapeHtml(item.author)}</span>` : ""}
         `;
       } else if (catId === "anime_acclaimed") {
         topBadges = `
@@ -3097,8 +3432,25 @@ Beklenen JSON alanları: ${schemaHint}`;
         topBadges = `
           <span class="font-mono text-[10.5px] font-semibold px-2.5 py-0.5 rounded-full bg-sage/12 text-sage">${escapeHtml(item.tag || "Fil'm Hafızası")}</span>
           ${item.date ? `<span class="font-mono text-[10.5px] text-stonewarm">${escapeHtml(item.date)}</span>` : ""}
+          ${item.author ? `<span class="font-mono text-[10.5px] px-2 py-0.5 rounded-full bg-sand text-stonewarm">${escapeHtml(item.author)}</span>` : ""}
         `;
       }
+
+      // Tüm kategorilerde varsa öne çıkan detay maddeleri ve editör notu
+      const keyPointsHtml = (Array.isArray(item.keyPoints) && item.keyPoints.length > 0) ? `
+        <div class="mt-3.5 rounded-2xl bg-linen/90 border border-hairline p-3.5 space-y-1.5">
+          <div class="font-mono text-[10px] uppercase tracking-[0.09em] text-stonewarm font-semibold">Öne Çıkan Detaylar</div>
+          <ul class="space-y-1.5">
+            ${item.keyPoints.map(pt => `<li class="text-[12.5px] text-espresso/90 flex items-start gap-2 leading-relaxed"><span class="text-terracotta font-bold">•</span><span>${escapeHtml(pt)}</span></li>`).join("")}
+          </ul>
+        </div>
+      ` : "";
+
+      const editorialNoteHtml = item.editorialNote ? `
+        <div class="mt-3 rounded-2xl bg-sage/8 border border-sage/15 px-3.5 py-2.5 text-[12.5px] text-sage leading-relaxed">
+          <strong>Editör Notu:</strong> ${escapeHtml(item.editorialNote)}
+        </div>
+      ` : "";
 
       return `
         <article class="rounded-3xl bg-porcelain border border-hairline p-5 sm:p-6 shadow-card hover:shadow-soft transition-shadow animate-fade-up">
@@ -3107,6 +3459,8 @@ Beklenen JSON alanları: ${schemaHint}`;
           ${metaBlock ? `<div class="mt-2">${metaBlock}</div>` : ""}
           ${item.summary ? `<p class="mt-2.5 text-[13.5px] text-espresso/85 leading-relaxed">${escapeHtml(item.summary)}</p>` : ""}
           ${extraBlock}
+          ${keyPointsHtml}
+          ${editorialNoteHtml}
           ${buildCardFooterHtml(item, idx)}
         </article>
       `;
@@ -3267,15 +3621,15 @@ Beklenen JSON alanları: ${schemaHint}`;
     }
 
     /* ============================================================================
-       12. TIKLANABİLİR TAM DETAYLI NoSQL ARŞİV MODALI
+       12. TIKLANABİLİR TAM DETAYLI NoSQL ARŞİV MODALI & KATEGORİYE GERİ GÖNDERME
        ============================================================================ */
     function openArchiveModal(preselectCategory = "all") {
       const sel = document.getElementById("archiveCategorySelect");
       const searchInput = document.getElementById("archiveSearchInput");
       if (sel) {
-        sel.innerHTML = `<option value="all">Tüm Kategoriler (${nosql.getTotalCount()})</option>` +
+        sel.innerHTML = `<option value="all">Tüm Arşivlenenler (${nosql.getArchivedCount("all")})</option>` +
           CATEGORIES.map(c => {
-            const cnt = nosql.getRecordsByCategory(c.id).length;
+            const cnt = nosql.getArchivedCount(c.id);
             return `<option value="${c.id}">${c.num} · ${escapeHtml(c.shortName)} (${cnt})</option>`;
           }).join("");
         sel.value = preselectCategory;
@@ -3291,6 +3645,34 @@ Beklenen JSON alanları: ${schemaHint}`;
       document.getElementById("archiveModal")?.classList.add("hidden");
     }
 
+    async function restoreArchiveItem(key) {
+      const restored = await nosql.restoreItemToCategory(key);
+      if (!restored) return;
+      const { record, item } = restored;
+      const cat = CATEGORIES.find(c => c.id === record.categoryId);
+
+      // Kategorinin aktif listesini NoSQL'den güncel hâliyle senkronize et
+      state.sessionItems[record.categoryId] = nosql.getActiveItemsForCategory(record.categoryId);
+      state.expandedArchiveKeys.delete(key);
+
+      // Arşiv select sayaçlarını ve listeyi güncelle
+      const currentSel = document.getElementById("archiveCategorySelect")?.value || "all";
+      const sel = document.getElementById("archiveCategorySelect");
+      if (sel) {
+        sel.innerHTML = `<option value="all">Tüm Arşivlenenler (${nosql.getArchivedCount("all")})</option>` +
+          CATEGORIES.map(c => {
+            const cnt = nosql.getArchivedCount(c.id);
+            return `<option value="${c.id}">${c.num} · ${escapeHtml(c.shortName)} (${cnt})</option>`;
+          }).join("");
+        sel.value = currentSel;
+      }
+
+      renderArchiveList();
+      renderSidebarNav();
+      renderActiveCategory();
+      showToast(`"${item.title}" kaydı "${cat ? cat.shortName : record.categoryId}" kategorisine geri gönderildi.`, "success");
+    }
+
     function renderArchiveItemDetail(rec, item) {
       if (!item) {
         return `<p class="mt-3 pt-3 border-t border-hairline text-[12.5px] text-stonewarm">Bu kayıt için ek detay bulunamadı.</p>`;
@@ -3301,6 +3683,7 @@ Beklenen JSON alanları: ${schemaHint}`;
       if (item.continent) badges.push({ label: "Kıta", val: item.continent });
       if (item.festival) badges.push({ label: "Festival", val: item.festival });
       if (item.dates || item.date) badges.push({ label: "Tarih", val: item.dates || item.date });
+      if (item.author) badges.push({ label: "Yazar / Kaynak", val: item.author });
       if (item.status) badges.push({ label: "Durum", val: item.status });
       if (item.segment) badges.push({ label: "Segment", val: item.segment });
       if (item.rank) badges.push({ label: "Sıralama", val: item.rank });
@@ -3363,6 +3746,7 @@ Beklenen JSON alanları: ${schemaHint}`;
       if (item.highlights) textSections.push({ title: "Öne Çıkan Not", body: item.highlights });
       if (item.eligibility) textSections.push({ title: "Başvuru Koşulları", body: item.eligibility });
       if (item.supportedWorks) textSections.push({ title: "Desteklenen Filmler / Kategoriler", body: item.supportedWorks });
+      if (item.editorialNote) textSections.push({ title: "Editör Notu", body: item.editorialNote });
       if (rec.categoryId !== "mubi_posters") {
         if (item.artistNote) textSections.push({ title: "Sanatçı Notu", body: item.artistNote });
         if (item.selectionReason) textSections.push({ title: "Seçilme Nedeni", body: item.selectionReason });
@@ -3374,6 +3758,19 @@ Beklenen JSON alanları: ${schemaHint}`;
           <p class="text-[13px] text-espresso/90 leading-relaxed">${escapeHtml(s.body)}</p>
         </div>
       `).join("");
+
+      const keyPointsHtml = (Array.isArray(item.keyPoints) && item.keyPoints.length > 0) ? `
+        <div>
+          <div class="font-mono text-[10px] uppercase tracking-[0.08em] text-stonewarm mb-1.5">Öne Çıkan Detaylar</div>
+          <ul class="space-y-1.5">
+            ${item.keyPoints.map(pt => `
+              <li class="px-3 py-1.5 rounded-xl bg-porcelain border border-hairline/70 text-[12px] text-espresso flex items-start gap-2">
+                <span class="text-terracotta">•</span><span>${escapeHtml(pt)}</span>
+              </li>
+            `).join("")}
+          </ul>
+        </div>
+      ` : "";
 
       const awardsHtml = (Array.isArray(item.awards) && item.awards.length > 0) ? `
         <div>
@@ -3411,18 +3808,27 @@ Beklenen JSON alanları: ${schemaHint}`;
           ${highlightBoxHtml}
           ${posterPreviewHtml}
           ${textBlocksHtml}
+          ${keyPointsHtml}
           ${metaGridHtml}
           ${awardsHtml}
           ${festivalsHtml}
           ${competitionFilmsHtml}
           <div class="pt-3 border-t border-hairline/70 flex flex-wrap items-center justify-between gap-2">
-            <button type="button" data-archive-ig-key="${escapeHtml(rec.key)}" class="px-3.5 py-1.5 rounded-xl bg-porcelain border border-hairline hover:border-terracotta hover:text-terracotta text-[12px] font-medium text-espresso transition-colors inline-flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5 text-terracotta" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-                <rect x="3" y="3" width="18" height="18" rx="5" ry="5"/>
-                <circle cx="12" cy="12" r="3.5"/>
-              </svg>
-              Instagram Metni Oluştur
-            </button>
+            <div class="flex flex-wrap items-center gap-2">
+              <button type="button" data-archive-restore-key="${escapeHtml(rec.key)}" class="px-3.5 py-1.5 rounded-xl bg-sage hover:bg-sage/90 text-porcelain text-[12px] font-semibold transition-colors inline-flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"/>
+                </svg>
+                Kategoriye Geri Gönder
+              </button>
+              <button type="button" data-archive-ig-key="${escapeHtml(rec.key)}" class="px-3.5 py-1.5 rounded-xl bg-porcelain border border-hairline hover:border-terracotta hover:text-terracotta text-[12px] font-medium text-espresso transition-colors inline-flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-terracotta" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                  <rect x="3" y="3" width="18" height="18" rx="5" ry="5"/>
+                  <circle cx="12" cy="12" r="3.5"/>
+                </svg>
+                Instagram Metni Oluştur
+              </button>
+            </div>
             ${item.sourceUrl ? `<a href="${escapeHtml(item.sourceUrl)}" target="_blank" rel="noopener noreferrer" class="font-mono text-[11.5px] text-terracotta hover:underline">Resmi Kaynağa Git ↗</a>` : ""}
           </div>
         </div>
@@ -3435,7 +3841,7 @@ Beklenen JSON alanları: ${schemaHint}`;
       const body = document.getElementById("archiveModalBody");
       if (!body) return;
 
-      let records = nosql.getRecordsByCategory(selCat);
+      let records = nosql.getArchivedRecordsByCategory(selCat);
       if (searchQ) {
         records = records.filter(rec =>
           (rec.title || "").toLowerCase().includes(searchQ) ||
@@ -3445,8 +3851,11 @@ Beklenen JSON alanları: ${schemaHint}`;
 
       if (records.length === 0) {
         body.innerHTML = `
-          <div class="text-center py-10 text-stonewarm text-[13.5px]">
-            Bu seçimde eşleşen arşivlenmiş NoSQL kaydı bulunmuyor.
+          <div class="text-center py-10 space-y-2">
+            <div class="text-espresso font-medium text-[14px]">Bu seçimde arşivlenmiş kayıt bulunmuyor.</div>
+            <p class="text-stonewarm text-[12.5px] max-w-md mx-auto">
+              Ekrandaki veriler sayfayı kapattığınızda değil, yalnızca herhangi bir kategoride <strong>"Veriyi Yenile"</strong> veya sol menüdeki <strong>"Tüm Kategorileri Yenile"</strong> butonuna bastığınızda buraya taşınır.
+            </p>
           </div>
         `;
         return;
@@ -3456,7 +3865,6 @@ Beklenen JSON alanları: ${schemaHint}`;
 
       body.innerHTML = records.map(rec => {
         const cat = CATEGORIES.find(c => c.id === rec.categoryId);
-        const isCurrentSession = rec.deliveredSessionId === CURRENT_SESSION_ID;
         const isExpanded = state.expandedArchiveKeys.has(rec.key);
         let parsedItem = null;
         try {
@@ -3468,25 +3876,31 @@ Beklenen JSON alanları: ${schemaHint}`;
 
         return `
           <div class="rounded-2xl border transition-colors ${isExpanded ? "bg-linen border-terracotta/40" : "bg-linen/70 border-hairline hover:border-stonewarm/40"} p-4">
-            <button type="button" data-archive-toggle-key="${escapeHtml(rec.key)}" aria-expanded="${isExpanded ? "true" : "false"}" class="w-full text-left flex items-start sm:items-center justify-between gap-3">
-              <div class="min-w-0 flex-1">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <button type="button" data-archive-toggle-key="${escapeHtml(rec.key)}" aria-expanded="${isExpanded ? "true" : "false"}" class="min-w-0 flex-1 text-left">
                 <div class="flex flex-wrap items-center gap-1.5 mb-1">
                   <span class="font-mono text-[10.5px] px-2 py-0.5 rounded-full bg-porcelain border border-hairline text-espresso">${cat ? cat.num + " · " + escapeHtml(cat.shortName) : escapeHtml(rec.categoryId)}</span>
-                  <span class="font-mono text-[10px] px-2 py-0.5 rounded-full ${isCurrentSession ? "bg-sage/15 text-sage" : "bg-sand text-stonewarm"}">${isCurrentSession ? "Bu Oturumda Teslim Edildi" : "Önceki Oturum (Gizli)"}</span>
+                  <span class="font-mono text-[10px] px-2 py-0.5 rounded-full bg-sand text-stonewarm">Arşivde</span>
                   <span class="font-mono text-[10px] text-stonewarm">${escapeHtml(rec.provenance || "")}</span>
+                  <span class="font-mono text-[10px] text-stonewarm/80">· ${formatDateTr(rec.archivedAt || rec.seenAt)}</span>
                 </div>
                 <div class="text-[14px] font-semibold text-espresso leading-snug">${escapeHtml(rec.title)}</div>
-              </div>
-              <div class="flex items-center gap-2.5 shrink-0">
-                <span class="hidden sm:inline font-mono text-[11px] text-stonewarm">${formatDateTr(rec.seenAt)}</span>
-                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-porcelain border border-hairline text-[11px] font-medium ${isExpanded ? "text-terracotta border-terracotta/30" : "text-espresso"}">
+              </button>
+              <div class="flex items-center gap-2 shrink-0">
+                <button type="button" data-archive-restore-key="${escapeHtml(rec.key)}" title="Bu kaydı kategorisine geri gönder" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-sage/12 hover:bg-sage text-sage hover:text-porcelain text-[11.5px] font-semibold transition-colors">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"/>
+                  </svg>
+                  <span>Kategoriye Geri Gönder</span>
+                </button>
+                <button type="button" data-archive-toggle-key="${escapeHtml(rec.key)}" aria-expanded="${isExpanded ? "true" : "false"}" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-porcelain border border-hairline text-[11.5px] font-medium ${isExpanded ? "text-terracotta border-terracotta/30" : "text-espresso"}">
                   ${isExpanded ? "Gizle" : "Detay"}
                   <svg class="w-3.5 h-3.5 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
                   </svg>
-                </span>
+                </button>
               </div>
-            </button>
+            </div>
             ${isExpanded ? renderArchiveItemDetail(rec, parsedItem) : ""}
           </div>
         `;
@@ -3501,6 +3915,14 @@ Beklenen JSON alanları: ${schemaHint}`;
             state.expandedArchiveKeys.add(key);
           }
           renderArchiveList();
+        });
+      });
+
+      body.querySelectorAll("[data-archive-restore-key]").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const key = btn.getAttribute("data-archive-restore-key");
+          if (key) restoreArchiveItem(key);
         });
       });
 
@@ -3727,7 +4149,8 @@ Beklenen JSON alanları: ${schemaHint}`;
     }
 
     /* ============================================================================
-       15. BAŞLATMA (BOOTSTRAP) — İLK OTURUM TOHUMLAMA & MÜKERRER KORUMASI
+       15. BAŞLATMA (BOOTSTRAP) — SAYFA YENİLEMEDE AKTİF VERİLERİ KORUR
+       Arşivleme YALNIZCA "Veriyi Yenile" butonuna basıldığında yapılır.
        ============================================================================ */
     async function bootstrap() {
       try {
@@ -3737,25 +4160,33 @@ Beklenen JSON alanları: ${schemaHint}`;
 
         await nosql.init();
 
-        // Her kategori için başlangıç verilerini yalnızca NoSQL'de DAHA ÖNCE GÖRÜLMEMİŞSE teslim et
-        let firstLoadNewTotal = 0;
-        let hiddenFromPreviousSessions = 0;
+        let seededTotal = 0;
+        let restoredActiveTotal = 0;
 
         for (const cat of CATEGORIES) {
-          const seeds = INITIAL_SEED_DATA[cat.id] || [];
-          const { newlySaved, duplicatesFiltered } = await nosql.saveItems(cat.id, seeds, "İlk Kürasyon");
-          state.sessionItems[cat.id] = newlySaved;
-          firstLoadNewTotal += newlySaved.length;
-          hiddenFromPreviousSessions += duplicatesFiltered;
+          const totalInCat = nosql.getTotalCountForCategory(cat.id);
+          if (totalInCat === 0) {
+            // Bu kategori ilk kez açılıyor: başlangıç kürasyonunu 'active' olarak yükle
+            const seeds = INITIAL_SEED_DATA[cat.id] || [];
+            const { newlySaved } = await nosql.saveItems(cat.id, seeds, "İlk Kürasyon", "active");
+            state.sessionItems[cat.id] = newlySaved;
+            seededTotal += newlySaved.length;
+          } else {
+            // Sayfa yenilendi veya kapatılıp açıldı: mevcut aktif kayıtları arşive ATMA, aynen göster!
+            const activeItems = nosql.getActiveItemsForCategory(cat.id);
+            state.sessionItems[cat.id] = activeItems;
+            restoredActiveTotal += activeItems.length;
+          }
         }
 
+        const totalArchived = nosql.getArchivedCount("all");
         renderSidebarNav();
         renderActiveCategory();
 
-        if (firstLoadNewTotal > 0) {
-          showToast(`${firstLoadNewTotal} yeni içerik yüklendi ve NoSQL belleğine kaydedildi.`, "success");
-        } else if (hiddenFromPreviousSessions > 0) {
-          showToast(`Önceki oturumdan ${hiddenFromPreviousSessions} kayıt NoSQL belleğinde gizlendi. Yeni veriler için yenileyebilirsiniz.`, "info");
+        if (seededTotal > 0) {
+          showToast(`${seededTotal} detaylı içerik yüklendi. Veriler yalnızca "Veriyi Yenile" dediğinizde arşive alınır.`, "success");
+        } else {
+          showToast(`${restoredActiveTotal} aktif kayıt korundu${totalArchived > 0 ? ` · ${totalArchived} kayıt arşivde` : ""}.`, "info");
         }
       } catch (err) {
         showToast("Uygulama başlatılırken geçici bir hata oluştu.", "error");

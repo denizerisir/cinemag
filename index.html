@@ -2814,7 +2814,12 @@
       getActiveItemsForCategory(categoryId) {
         return this.getActiveRecordsByCategory(categoryId).map(rec => {
           try {
-            return JSON.parse(rec.payloadJson);
+            const parsed = JSON.parse(rec.payloadJson);
+            return {
+              ...parsed,
+              _key: parsed._key || rec.key,
+              _provenance: parsed._provenance || rec.provenance
+            };
           } catch {
             return { title: rec.title, _key: rec.key, _provenance: rec.provenance };
           }
@@ -3252,6 +3257,242 @@ KATEGORİ ÖZEL KURALLARI (FİL'M HAFIZASI & SİNEMA GÜNDEMİ):
     }
 
     /**
+     * Gemini 3 yanıtlarındaki düşünme (thought) parçalarını dışlayarak
+     * yalnızca gerçek çıktı metnini güvenli biçimde birleştirir.
+     */
+    function extractNonThoughtText(apiData) {
+      const parts = apiData?.candidates?.[0]?.content?.parts;
+      if (!Array.isArray(parts)) return "";
+      const nonThought = parts
+        .filter(p => !p.thought && typeof p.text === "string" && p.text.trim().length > 0)
+        .map(p => p.text)
+        .join("\n");
+      if (nonThought.trim()) return nonThought;
+      return parts.map(p => (typeof p.text === "string" ? p.text : "")).join("\n");
+    }
+
+    /**
+     * Metin içinden tek bir JSON nesnesini ({...}) veya dizi içindeki ilk nesneyi ([{...}])
+     * güvenli biçimde ayrıştırır.
+     */
+    function extractJsonObjectFromText(rawText) {
+      if (!rawText) return null;
+      const cleaned = String(rawText).replace(/```json/gi, "").replace(/```/g, "").trim();
+
+      // 1. Doğrudan JSON olarak ayrıştırmayı dene
+      try {
+        const direct = JSON.parse(cleaned);
+        if (Array.isArray(direct) && direct[0] && typeof direct[0] === "object") return direct[0];
+        if (direct && typeof direct === "object" && !Array.isArray(direct)) return direct;
+      } catch {
+        // dengeli süslü parantez taramasına geç
+      }
+
+      // 2. Dengeli { ... } bloğunu bularak ayrıştır
+      const startIdx = cleaned.indexOf("{");
+      if (startIdx === -1) return null;
+      let depth = 0;
+      let inStr = false;
+      let escaped = false;
+      for (let i = startIdx; i < cleaned.length; i++) {
+        const ch = cleaned[i];
+        if (escaped) {
+          escaped = false;
+          continue;
+        }
+        if (ch === "\\" && inStr) {
+          escaped = true;
+          continue;
+        }
+        if (ch === '"') {
+          inStr = !inStr;
+          continue;
+        }
+        if (!inStr) {
+          if (ch === "{") depth++;
+          else if (ch === "}") {
+            depth--;
+            if (depth === 0) {
+              try {
+                const candidate = JSON.parse(cleaned.slice(startIdx, i + 1));
+                if (candidate && typeof candidate === "object") return candidate;
+              } catch {
+                break;
+              }
+            }
+          }
+        }
+      }
+
+      // 3. Son çare: ilk '{' ile son '}' arasını dene
+      const lastIdx = cleaned.lastIndexOf("}");
+      if (lastIdx > startIdx) {
+        try {
+          return JSON.parse(cleaned.slice(startIdx, lastIdx + 1));
+        } catch {
+          return null;
+        }
+      }
+      return null;
+    }
+
+    /**
+     * Üstel geri çekilmeli (1s, 2s, 4s) Gemini API çağrı yardımcısı.
+     * Geçici 429/5xx hız kısıtlamalarını ve zaman aşımlarını sessizce yeniden dener.
+     */
+    async function callGeminiWithBackoff(payload, timeoutMs = 28000, maxRetries = 3) {
+      const apiKey = ""; // Canvas runtime otomatik sağlar
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+      for (let attempt = 0; attempt < maxRetries; attempt++) {
+        try {
+          const res = await fetchWithTimeout(apiUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          }, timeoutMs);
+
+          if (res.ok) {
+            const data = await res.json();
+            const text = extractNonThoughtText(data);
+            if (text && text.trim().length > 0) {
+              return { ok: true, text, status: res.status };
+            }
+          } else {
+            // 400/401/403 gibi kalıcı istemci hatalarında boşa bekleme yapmadan dön
+            if (res.status >= 400 && res.status < 500 && res.status !== 429 && res.status !== 408) {
+              return { ok: false, text: "", status: res.status };
+            }
+          }
+        } catch {
+          // Ağ veya zaman aşımı durumunda üstel geri çekilme ile tekrar dene
+        }
+
+        if (attempt < maxRetries - 1) {
+          const delayMs = 1000 * Math.pow(2, attempt); // 1s, 2s, 4s
+          await new Promise(resolve => setTimeout(resolve, delayMs));
+        }
+      }
+
+      return { ok: false, text: "", status: 0 };
+    }
+
+    /**
+     * Dış AI servisi erişilemezse (ör. çevrimdışı kullanım veya kısıtlı ağ),
+     * karttaki doğrulanmış olguları, rakamları ve tarihleri koruyarak
+     * profesyonel Giriş–Gelişme–Detaylar–Sonuç yapısında yerel özgünleştirme yapar.
+     */
+    function localEditorialRewrite(categoryId, item) {
+      const nextVer = ((item._rewriteVersion || 0) % 3) + 1;
+      const stripCliches = (str) => String(str || "")
+        .replace(/\b(günümüzde|adeta|şüphesiz|büyük yankı uyandırdı|dikkatleri üzerine çekti|nefes kesen|büyüleyici|merakla bekleniyor|unutulmaz bir deneyim)\b/gi, "")
+        .replace(/\s{2,}/g, " ")
+        .trim();
+
+      const catObj = CATEGORIES.find(c => c.id === categoryId);
+      const srcLabel = item.sourceName || item.institution || (catObj ? catObj.shortName : "Resmî Kaynak");
+      const pubDate = item.publishDate || item.date || getTodayDateTr();
+      const baseSummary = stripCliches(item.summary || item.artistNote || "");
+      const baseBody = stripCliches(item.body || "");
+      const existingDetails = Array.isArray(item.details) && item.details.length > 0
+        ? item.details.map(stripCliches).filter(Boolean)
+        : (Array.isArray(item.keyPoints) ? item.keyPoints.map(stripCliches).filter(Boolean) : []);
+
+      // Kategoriye özgü doğrulanmış olgulardan somut detay maddeleri derle
+      const factBullets = [];
+      if (categoryId === "festival_grants") {
+        if (item.supportedCategories) factBullets.push(`Destek Kapsamı: ${item.supportedCategories}`);
+        factBullets.push(`Finansman Tutarı: ${item.amount || "Açıklanmadı"}`);
+        if (item.openDate || item.deadline) factBullets.push(`Başvuru Takvimi: Açılış ${item.openDate || "Açıklanmadı"} — Son başvuru ${item.deadline || "Açıklanmadı"}.`);
+        if (item.eligibleApplicants) factBullets.push(`Başvuru Uygunluğu: ${item.eligibleApplicants}`);
+      } else if (categoryId === "mubi_categories" || categoryId === "anime_acclaimed") {
+        if (item.director) factBullets.push(`Yönetmen ve Künye: ${item.director}${item.year ? ` (${item.year})` : ""}${item.studio ? ` · Stüdyo: ${item.studio}` : ""}${item.countryRuntime ? ` · ${item.countryRuntime}` : ""}.`);
+        if (item.score) factBullets.push(`Eleştirmen / İzleyici Skoru: ${item.score}.`);
+        if (Array.isArray(item.awards) && item.awards.length > 0) factBullets.push(`Ödüller: ${item.awards.join(", ")}.`);
+        if (Array.isArray(item.festivals) && item.festivals.length > 0) factBullets.push(`Festival Seçkileri: ${item.festivals.join(", ")}.`);
+      } else if (categoryId === "box_office") {
+        if (item.metrics) factBullets.push(`Gişe / Takvim Verisi: ${item.metrics}.`);
+        if (item.theaters) factBullets.push(`Salon ve Format Dağılımı: ${item.theaters}.`);
+        if (item.rank) factBullets.push(`Sıralama Konumu: ${item.rank}.`);
+      } else if (categoryId === "rotten_tomatoes") {
+        if (item.tomatometer && item.tomatometer !== "Açıklanmadı") factBullets.push(`Tomatometer Eleştirmen Puanı: ${item.tomatometer}.`);
+        if (item.audienceScore && item.audienceScore !== "Açıklanmadı") factBullets.push(`İzleyici Puanı: ${item.audienceScore}.`);
+        if (item.director) factBullets.push(`Yazar / Yönetmen Kaydı: ${item.director}.`);
+      } else if (categoryId === "mubi_posters") {
+        if (item.artist) factBullets.push(`Afiş Tasarımcısı: ${item.artist}${item.year ? ` (${item.year})` : ""}.`);
+        if (item.periodTag) factBullets.push(`Kürasyon Bölümü: MUBI Notebook — ${item.periodTag}.`);
+        if (item.selectionReason) factBullets.push(`Seçki Gerekçesi: ${stripCliches(item.selectionReason)}`);
+      } else if (categoryId === "turkey_festivals") {
+        if (item.festival) factBullets.push(`Organizasyon: ${item.festival}${item.dates ? ` (${item.dates})` : ""}.`);
+        if (Array.isArray(item.competitionFilms) && item.competitionFilms.length > 0) {
+          factBullets.push(`Yarışma / Program Başlıkları: ${item.competitionFilms.slice(0, 3).join("; ")}.`);
+        }
+      } else if (categoryId === "world_festivals") {
+        if (item.festival) factBullets.push(`Bölge ve Festival: ${item.continent || "Uluslararası"} — ${item.festival}${item.dates ? ` (${item.dates})` : ""}.`);
+        if (item.highlights) factBullets.push(`Öne Çıkan Gelişme: ${stripCliches(item.highlights)}`);
+      } else {
+        factBullets.push(`Kaynak ve Tarih: ${srcLabel} · Yayın tarihi ${pubDate}.`);
+        if (item.author) factBullets.push(`Yazar / Masa: ${item.author}.`);
+      }
+
+      // Tekrarsız detay listesi (3-4 madde)
+      const seenNorm = new Set();
+      const mergedDetails = [...existingDetails, ...factBullets]
+        .filter(line => {
+          const k = normalizeTextKey(line).slice(0, 48);
+          if (!k || seenNorm.has(k)) return false;
+          seenNorm.add(k);
+          return true;
+        })
+        .slice(0, 4);
+
+      // Versiyona göre doğal ve tekrarsız gazetecilik girişi
+      const leadVariants = [
+        `${srcLabel} tarafından ${pubDate} tarihinde kayda geçirilen gelişmede ${baseSummary ? baseSummary.charAt(0).toLowerCase() + baseSummary.slice(1) : item.title}`,
+        baseSummary || `${item.title} başlığına ilişkin güncel veriler ${srcLabel} kaynağında yayımlandı.`,
+        `${pubDate} tarihli ${srcLabel} verilerine göre: ${baseSummary || item.title}`
+      ];
+      const newSummary = leadVariants[nextVer - 1].replace(/\.\.+/g, ".").trim();
+
+      // Gelişme paragrafını mevcut doğrulanmış metin + ek olgularla ör
+      const devPieces = [];
+      if (baseBody && normalizeTextKey(baseBody) !== normalizeTextKey(baseSummary)) {
+        devPieces.push(baseBody);
+      } else if (baseSummary) {
+        devPieces.push(baseSummary);
+      }
+      if (item.requirements && !baseBody.includes(item.requirements.slice(0, 25))) {
+        devPieces.push(`Başvuru sürecinde aranan temel belgeler ve koşullar şöyle sıralanıyor: ${item.requirements}`);
+      }
+      if (item.resultDate && !baseBody.includes(item.resultDate.slice(0, 20))) {
+        devPieces.push(`Değerlendirme ve sonuç takvimi kapsamında ${item.resultDate} bilgisi paylaşıldı.`);
+      }
+      if (item.highlights && !baseBody.includes(item.highlights.slice(0, 20))) {
+        devPieces.push(stripCliches(item.highlights));
+      }
+      if (devPieces.length === 1 && mergedDetails.length > 0) {
+        devPieces.push(`Kayıtta öne çıkan temel veriler arasında ${mergedDetails[0].replace(/\.$/, "")} bilgisi yer alıyor.`);
+      }
+      const newBody = devPieces.join(" ").trim();
+
+      const conclusionVariants = [
+        item.conclusion || item.editorialNote || `${srcLabel} verileriyle doğrulanan bu gelişme, ${catObj ? catObj.shortName.toLowerCase() : "sinema"} gündemindeki mevcut eğilimleri somut verilerle ortaya koyuyor.`,
+        `${catObj ? catObj.shortName : "Sinema"} alanındaki bu güncel kayıt, sektör takipçileri ve içerik editörleri için doğrulanmış birincil kaynak referansı sunuyor.`,
+        `${pubDate} itibarıyla ${item.currentStatus || "güncel"} statüsünde yer alan gelişmeye ilişkin ek ayrıntılar doğrudan resmî kaynak üzerinden izlenebiliyor.`
+      ];
+      const newConclusion = stripCliches(conclusionVariants[(nextVer - 1) % conclusionVariants.length]);
+
+      return {
+        title: item.title,
+        summary: newSummary,
+        body: newBody,
+        details: mergedDetails.length > 0 ? mergedDetails : [`Kaynak: ${srcLabel} (${pubDate}).`],
+        conclusion: newConclusion,
+        _rewriteVersion: nextVer
+      };
+    }
+
+    /**
      * Ham RSS veya HTML verilerini Gemini Editör katmanıyla kopyala-yapıştır olmadan,
      * tamamen özgün Giriş–Gelişme–Detaylar–Sonuç haber metinlerine dönüştürür.
      */
@@ -3285,37 +3526,24 @@ Beklenen JSON şeması: ${schemaHint}
 Ham kaynak verileri:
 ${JSON.stringify(compactInput)}`;
 
-      const apiKey = "";
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+      const aiRes = await callGeminiWithBackoff({
+        systemInstruction: { parts: [{ text: getEditorialSystemInstruction() }] },
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { responseMimeType: "application/json" }
+      }, 24000, 2);
 
-      try {
-        const res = await fetchWithTimeout(apiUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            systemInstruction: { parts: [{ text: getEditorialSystemInstruction() }] },
-            contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: { responseMimeType: "application/json" }
-          })
-        }, 14000);
-
-        if (res.ok) {
-          const data = await res.json();
-          const rawText = data?.candidates?.[0]?.content?.parts?.map(p => p.text || "").join("") || "";
-          const parsed = extractJsonArrayFromText(rawText);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            appendScanLog(`Editöryal özgünleştirme tamamlandı: ${parsed.length} özgün haber hazırlandı.`, "ok");
-            return parsed.map((item, i) => ({
-              ...item,
-              sourceUrl: item.sourceUrl || rawEntries[i]?.link || rawEntries[i]?.url || DATA_SOURCES[categoryId]?.officialPortals?.[0],
-              sourceName: item.sourceName || rawEntries[i]?.host || sourceTag,
-              publishDate: formatIsoToDdMmYyyy(item.publishDate || rawEntries[i]?.pubDate),
-              fetchMethod: `${sourceTag} · Özgün Editör`
-            }));
-          }
+      if (aiRes.ok) {
+        const parsed = extractJsonArrayFromText(aiRes.text);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          appendScanLog(`Editöryal özgünleştirme tamamlandı: ${parsed.length} özgün haber hazırlandı.`, "ok");
+          return parsed.map((item, i) => ({
+            ...item,
+            sourceUrl: item.sourceUrl || rawEntries[i]?.link || rawEntries[i]?.url || DATA_SOURCES[categoryId]?.officialPortals?.[0],
+            sourceName: item.sourceName || rawEntries[i]?.host || sourceTag,
+            publishDate: formatIsoToDdMmYyyy(item.publishDate || rawEntries[i]?.pubDate),
+            fetchMethod: `${sourceTag} · Özgün Editör`
+          }));
         }
-      } catch {
-        // AI zenginleştirme başarısız olursa aşağıdaki yerel yapılandırıcı çalışır
       }
 
       appendScanLog("Editöryal özgünleştirme zaman aşımına uğradı; yapılandırılmış yerel ayrıştırıcı kullanılıyor.", "warn");
@@ -3332,72 +3560,135 @@ ${JSON.stringify(compactInput)}`;
       if (idx === -1) return;
 
       const currentItem = list[idx];
-      const btn = document.querySelector(`[data-card-rewrite-key="${CSS.escape(itemKey)}"]`);
+      const safeSelectorKey = (typeof CSS !== "undefined" && typeof CSS.escape === "function")
+        ? CSS.escape(itemKey)
+        : itemKey.replace(/["\\]/g, "\\$&");
+      const btn = document.querySelector(`[data-card-rewrite-key="${safeSelectorKey}"]`);
+      const originalBtnHtml = btn ? btn.innerHTML : "";
+
       if (btn) {
         btn.disabled = true;
-        btn.textContent = "Özgünleştiriliyor...";
+        btn.innerHTML = `
+          <svg class="w-3.5 h-3.5 text-amberInk animate-spin" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/>
+          </svg>
+          <span>Özgünleştiriliyor...</span>
+        `;
       }
 
       const cat = CATEGORIES.find(c => c.id === categoryId);
-      const schemaHint = getGeminiSchemaHint(categoryId);
       const editorialRules = getCategoryEditorialInstructions(categoryId);
 
-      const prompt = `Aşağıdaki tek haber/içerik kaydını mevcut tüm olgularını, sayısal verilerini, kronolojisini, isimlerini ve bağlantılarını BİREBİR KORUYARAK yeniden yaz.
+      // İç alanları ayıklayarak yalnızca olgusal kayıt verisini modele gönder
+      const cleanFacts = {};
+      Object.keys(currentItem).forEach(k => {
+        if (!k.startsWith("_") && k !== "palette") {
+          cleanFacts[k] = currentItem[k];
+        }
+      });
+
+      const prompt = `Aşağıdaki sinema haberini, içindeki tüm olguları, rakamları, tarihleri, kronolojiyi ve kurum/kişi adlarını BİREBİR KORUYARAK baştan sona özgün ve doğal bir Türkçe gazetecilik metnine dönüştür.
 Kategori: "${cat ? cat.title : categoryId}"
-GÖREV:
-- Kopyala-yapıştır ifadeleri ve olası yapay zekâ kalıplarını tamamen temizle.
-- Haberi güçlü bir başlık, net bir Giriş ("summary"), kapsamlı bir Gelişme paragrafı ("body"), somut "details" maddeleri ve olgun bir Sonuç/Değerlendirme ("conclusion") ile profesyonel bir kültür-sanat / sinema haberine dönüştür.
-- Kaynakta yer almayan hiçbir bilgi, rakam veya tarih uydurma.
 ${editorialRules}
-- Yalnızca tek bir JSON nesnesi ({...}) döndür.
+KURALLAR:
+- Mevcut cümleleri birebir tekrar etme; tamamen farklı ve akıcı gazetecilik cümleleriyle yeniden ifade et.
+- Yapay zekâ klişelerini kesinlikle kullanma.
+- Kaynakta olmayan hiçbir sayısal veri, tarih veya iddia ekleme.
+- Yalnızca şu 5 alanı içeren tek bir JSON nesnesi döndür: "title", "summary" (Giriş, 1-2 cümle), "body" (Gelişme, 3-5 cümle), "details" (3-4 somut madde dizisi), "conclusion" (Sonuç ve Değerlendirme, 1-2 cümle).
 
-Beklenen alanlar: ${schemaHint}
-Mevcut kayıt:
-${JSON.stringify(currentItem)}`;
+Kaynak kayıt:
+${JSON.stringify(cleanFacts)}`;
 
-      const apiKey = "";
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+      const rewriteResponseSchema = {
+        type: "OBJECT",
+        properties: {
+          title: { type: "STRING" },
+          summary: { type: "STRING" },
+          body: { type: "STRING" },
+          details: {
+            type: "ARRAY",
+            items: { type: "STRING" }
+          },
+          conclusion: { type: "STRING" }
+        },
+        required: ["title", "summary", "body", "details", "conclusion"]
+      };
+
+      let rewritten = null;
+      let usedEngine = "Gemini Editör";
 
       try {
-        const res = await fetchWithTimeout(apiUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            systemInstruction: { parts: [{ text: getEditorialSystemInstruction() }] },
-            contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: { responseMimeType: "application/json" }
-          })
-        }, 15000);
+        // Deneme 1: Katı JSON şemalı + üstel geri çekilmeli Gemini çağrısı
+        const primaryRes = await callGeminiWithBackoff({
+          systemInstruction: { parts: [{ text: getEditorialSystemInstruction() }] },
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: rewriteResponseSchema
+          }
+        }, 28000, 3);
 
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        const rawText = data?.candidates?.[0]?.content?.parts?.map(p => p.text || "").join("") || "";
-        const cleaned = rawText.replace(/```json/gi, "").replace(/```/g, "").trim();
-        const objStart = cleaned.indexOf("{");
-        const objEnd = cleaned.lastIndexOf("}");
-        if (objStart === -1 || objEnd <= objStart) throw new Error("JSON parse error");
-        const rewritten = JSON.parse(cleaned.slice(objStart, objEnd + 1));
+        if (primaryRes.ok) {
+          rewritten = extractJsonObjectFromText(primaryRes.text);
+        }
+
+        // Deneme 2: Şemasız düz JSON yedeği (olası HTTP 400 / şema uyuşmazlığı için)
+        if (!rewritten || !rewritten.summary || !rewritten.body) {
+          const fallbackPrompt = `${getEditorialSystemInstruction()}\n\n${prompt}\n\nSADECE geçerli JSON nesnesi döndür, ek açıklama yazma.`;
+          const secondaryRes = await callGeminiWithBackoff({
+            contents: [{ parts: [{ text: fallbackPrompt }] }]
+          }, 24000, 2);
+
+          if (secondaryRes.ok) {
+            const parsedFallback = extractJsonObjectFromText(secondaryRes.text);
+            if (parsedFallback && (parsedFallback.summary || parsedFallback.body)) {
+              rewritten = parsedFallback;
+              usedEngine = "Gemini Editör (Yedek)";
+            }
+          }
+        }
+
+        // Deneme 3: Dış ağ/API tamamen kapalıysa yerel olgu-korumalı editör motoru
+        if (!rewritten || (!rewritten.summary && !rewritten.body)) {
+          rewritten = localEditorialRewrite(categoryId, currentItem);
+          usedEngine = "Yerel Editör Motoru";
+        }
+
+        const safeDetails = Array.isArray(rewritten.details) && rewritten.details.length > 0
+          ? rewritten.details.filter(d => typeof d === "string" && d.trim().length > 0)
+          : currentItem.details;
 
         const merged = {
           ...currentItem,
-          ...rewritten,
-          sourceUrl: currentItem.sourceUrl || rewritten.sourceUrl,
-          applicationUrl: currentItem.applicationUrl || rewritten.applicationUrl,
-          palette: currentItem.palette || rewritten.palette,
+          title: (typeof rewritten.title === "string" && rewritten.title.trim()) ? rewritten.title.trim() : currentItem.title,
+          summary: (typeof rewritten.summary === "string" && rewritten.summary.trim()) ? rewritten.summary.trim() : currentItem.summary,
+          body: (typeof rewritten.body === "string" && rewritten.body.trim()) ? rewritten.body.trim() : currentItem.body,
+          details: safeDetails,
+          conclusion: (typeof rewritten.conclusion === "string" && rewritten.conclusion.trim()) ? rewritten.conclusion.trim() : (currentItem.conclusion || currentItem.editorialNote),
+          _rewriteVersion: rewritten._rewriteVersion || ((currentItem._rewriteVersion || 0) + 1),
+          sourceUrl: currentItem.sourceUrl,
+          applicationUrl: currentItem.applicationUrl,
+          palette: currentItem.palette,
           _key: itemKey,
-          _provenance: "Editöryal Özgünleştirildi"
+          _provenance: usedEngine === "Yerel Editör Motoru" ? "Özgünleştirildi (Yerel)" : "Editöryal Özgünleştirildi"
         };
 
         await nosql.updateItemPayload(itemKey, merged);
         state.sessionItems[categoryId] = nosql.getActiveItemsForCategory(categoryId);
         renderActiveCategory();
-        showToast("Haber metni gazetecilik standardında özgünleştirildi ve NoSQL'e kaydedildi.", "success");
+
+        if (usedEngine === "Yerel Editör Motoru") {
+          showToast("Canlı AI servisine erişilemedi; yerel editör motoruyla olgular korunarak özgünleştirildi.", "info");
+        } else {
+          showToast("Haber metni gazetecilik standardında özgünleştirildi ve NoSQL'e kaydedildi.", "success");
+        }
       } catch {
-        showToast("Özgünleştirme servisi şu an yanıt vermedi; mevcut metin korundu.", "warn");
+        // Beklenmeyen çalışma zamanı hatasında bile butonu eski haline getir
         if (btn) {
           btn.disabled = false;
-          btn.textContent = "Özgünleştir";
+          btn.innerHTML = originalBtnHtml;
         }
+        showToast("Özgünleştirme sırasında beklenmeyen bir hata oluştu; mevcut metin korundu.", "warn");
       }
     }
 
@@ -3704,37 +3995,18 @@ Beklenen JSON alanları: ${schemaHint}`;
       ];
 
       for (const attempt of payloads) {
-        for (let retry = 0; retry < 2; retry++) {
-          try {
-            const res = await fetchWithTimeout(apiUrl, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(attempt.body)
-            }, 14000);
-
-            if (!res.ok) {
-              if (res.status === 429 && retry === 0) {
-                await new Promise(r => setTimeout(r, 1200));
-                continue;
-              }
-              break;
-            }
-
-            const data = await res.json();
-            const rawText = data?.candidates?.[0]?.content?.parts?.map(p => p.text || "").join("") || "";
-            const parsed = extractJsonArrayFromText(rawText);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              appendScanLog(`Katman 2 başarılı (${attempt.label}): ${parsed.length} özgün haber alındı.`, "ok");
-              return parsed.map(item => ({
-                ...item,
-                sourceUrl: item.sourceUrl || sources.officialPortals[0],
-                sourceName: item.sourceName || sources.label,
-                publishDate: formatIsoToDdMmYyyy(item.publishDate || item.date),
-                fetchMethod: attempt.label
-              }));
-            }
-          } catch {
-            // sonraki denemeye geç
+        const res = await callGeminiWithBackoff(attempt.body, 24000, 2);
+        if (res.ok) {
+          const parsed = extractJsonArrayFromText(res.text);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            appendScanLog(`Katman 2 başarılı (${attempt.label}): ${parsed.length} özgün haber alındı.`, "ok");
+            return parsed.map(item => ({
+              ...item,
+              sourceUrl: item.sourceUrl || sources.officialPortals[0],
+              sourceName: item.sourceName || sources.label,
+              publishDate: formatIsoToDdMmYyyy(item.publishDate || item.date),
+              fetchMethod: attempt.label
+            }));
           }
         }
       }
